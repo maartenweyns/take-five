@@ -1,12 +1,17 @@
+// Defining variables
+var socket;
+var gameid;
+var playerid;
+
 function create(create) {
     document.getElementById('pname').style.display = "block";
     if (!create) {
         document.getElementById('gcode').style.display = "block";
         document.getElementById('createButton').style.display = "none";
-        document.getElementById('joinButton').onclick = function() {console.log('JOIN');};
+        document.getElementById('joinButton').onclick = function() {setup(false);};
     } else {
         document.getElementById('joinButton').style.display = "none";
-        document.getElementById('createButton').onclick = function() {console.log('CREATE');};
+        document.getElementById('createButton').onclick = function() {setup(true);};
     }
     document.getElementById('backButton').style.display = "block";
 }
@@ -22,4 +27,42 @@ function back() {
     // Show both buttons again
     document.getElementById('joinButton').style.display = "block";
     document.getElementById('createButton').style.display = "block";
+}
+
+function AvoidSpace(event) {
+    var k = event ? event.which : window.event.keyCode;
+    if (k == 32) return false;
+}
+
+function setup(creating) {
+    let nameentered;
+    if (document.getElementById('player_name').value === "") {
+        return;
+    } else {
+        nameentered = document.getElementById('player_name').value;
+    }
+
+    socket = io(location.host);
+
+    if (creating) {
+        socket.emit('create-game');
+    }
+
+    socket.on('join', (gameid) => {
+        socket.emit('player-name', {name: nameentered, gid: gameid});
+    });
+
+    socket.on('information', (data) => {
+        // Set the variables
+        playerid = data.playerID;
+        gameid = data.gameID;
+
+        // Setup the cookies
+        let expires = new Date();
+        expires.setDate(expires.getDate() + 8);
+        document.cookie = "playerID=" + playerID + "; expires=" + expires;
+        expires.setDate(expires.getDate() + 8);
+        document.cookie = "gameID=" + gameID + "; expires=" + expires;
+
+    });
 }
