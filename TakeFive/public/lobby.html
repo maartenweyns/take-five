@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <!--Import materialize.css-->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="stylesheets/materialize.css"
+            media="screen,projection"
+        />
+        <!--Import lobby stylesheets-->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="stylesheets/lobby.css"
+            media="screen,projection"
+        />
+
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+
+    <body>
+        <div class="card z-depth-3 welcomebox">
+            <div class="pname input-field" id="pname" style="display: none;">
+                <input id="player_name" type="text" class="validate" maxlength="10" />
+                <label for="player_name">Your Name</label>
+            </div>
+            <div class="gcode input-field" id="gcode" style="display: none;">
+                <input id="game_code" type="text" class="validate" maxlength="10" />
+                <label for="game_code">Game Code</label>
+            </div>
+            <a id="joinButton" class="blue waves-effect waves-light btn" onclick="create(false);"
+                ><i class="material-icons left">play_for_work</i> Join Game</a
+            >
+            <a id="createButton" class="blue waves-effect waves-light btn" onclick="create(true);"
+                ><i class="material-icons left">add_circle</i> Create Game</a
+            >
+            <a id="backButton" class="blue waves-effect waves-light btn" style="display: none;" onclick="back()"
+                ><i class="material-icons left">arrow_back</i> Back</a
+            >
+        </div>
+
+        <p class="infoText" id="cookieMessage">
+            By using this site, you agree to the use of cookies.
+        </p>
+        <p class="infoText">Created by <strong>Maarten Weyns</strong></p>
+        <img class="mwglogo" src="images/logos/mawey-games-black-bluedrop.svg" />
+
+        <!--JavaScript at end of body for optimized loading-->
+        <script type="text/javascript" src="javascripts/materialize.min.js"></script>
+        <!--Lobby-Specific Javascript-->
+        <script type="text/javascript" src="javascripts/lobby.js"></script>
+    </body>
+</html>
