@@ -34,6 +34,10 @@ function AvoidSpace(event) {
     if (k == 32) return false;
 }
 
+function startgame() {
+    socket.emit('start-game', gameid);
+}
+
 function setup(creating) {
     let nameentered;
     if (document.getElementById('player_name').value === "") {
@@ -46,16 +50,31 @@ function setup(creating) {
 
     if (creating) {
         socket.emit('create-game');
+    } else {
+        socket.emit('player-name', {name: nameentered, gid: gameid});
     }
 
     socket.on('join', (gameid) => {
         socket.emit('player-name', {name: nameentered, gid: gameid});
     });
 
+    socket.on('invalid-game', () => {
+        alert('That game does not exist!');
+    });
+
+    socket.on('game-full', () => {
+        alert('This game is full!');
+    });
+
     socket.on('information', (data) => {
         // Set the variables
         playerid = data.playerID;
         gameid = data.gameID;
+
+        // Show the gameID on screen
+        document.getElementById('gameid').innerText = gameid;
+        document.getElementById('gameoverview').style.display = "flex";
+        document.getElementById('welcomebox').style.display = "none";
 
         // Setup the cookies
         let expires = new Date();

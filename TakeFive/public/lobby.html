@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Take 5!</title>
         <!--Game Icon-->
         <link href="images/logos/game-icon.png" rel="icon" />
         <!--Import Google Icon Font-->
@@ -25,7 +26,7 @@
     </head>
 
     <body>
-        <div class="card z-depth-3 welcomebox">
+        <div class="card z-depth-3 welcomebox" id="welcomebox">
             <div class="pname input-field" id="pname" style="display: none;">
                 <input id="player_name" type="text" class="validate" maxlength="10" onkeypress="return AvoidSpace(event)" />
                 <label for="player_name">Your Name</label>
@@ -49,8 +50,11 @@
             >
         </div>
 
-        <div class="gameoverview" style="display: none;">
+        <div class="card z-depth-3 gamebox" id="gameoverview" style="display: none;">
             <h1>You are in game <span id="gameid"></span></h1>
+            <a id="startButton" class="blue waves-effect waves-light btn" onclick="startgame();"
+                ><i class="material-icons left">play_arrow</i> Start Game</a
+            >
         </div>
 
         <p class="infoText" id="cookieMessage">

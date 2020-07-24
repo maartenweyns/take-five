@@ -7,9 +7,25 @@ const game = function (gameid) {
 
     // Make it the first round
     this.round = 1;
-
+    // Put all cards as available
     this.availableCards = Utils.allCards;
+    // Set the state to "lobby"
+    this.state = "lobby";
 };
+
+game.prototype.getPlayers = function () {
+    return this.players;
+}
+
+game.prototype.addPlayer = function (name) {
+    if (this.players.length < 10) {
+        let player = new Player(name, this.players.length);
+        this.players.push(player);
+        return {id: player.id};
+    } else {
+        return false;
+    }
+}
 
 game.prototype.takeAvailableCard = function () {
     let card = Utils.randomFromInterval(1, 104);

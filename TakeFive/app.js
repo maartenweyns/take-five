@@ -8,7 +8,6 @@ var http = require('http');
 var app = express();
 
 const Game = require('./game');
-const player = require('./player');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,6 +42,29 @@ io.on('connection', (socket) => {
         console.log(`[CREATEGAME] Game with id ${gameid} created!`);
         socket.emit('join', gameid);
     });
+    
+    socket.on('player-name', (data) => {
+        let name = data.name;
+        let gid = data.gid;
+
+        let game = games.get(gid);
+
+        if (game === undefined) {
+            socket.emit('invalid-game');
+            return;
+        }
+        let result = game.addPlayer(name);
+
+        if (result === false) {
+            socket.emit('game-full');
+            return;
+        } else {
+            socket.emit('information', {playerID: result.id, gameID: gid});
+            socket.join(gid);
+        }
+    });
+
+    
 });
 
 console.info('Starting serever on port ' + process.argv[2]);

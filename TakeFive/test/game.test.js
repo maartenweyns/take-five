@@ -22,4 +22,27 @@ describe('General Functionality Tests', () => {
         // The second time tho, it's already removed so it should not work anymore
         expect(game.removeCardFromAvailable(card)).toBeFalsy();
     });
+
+    test("Add player test", () => {
+        let expected = {id: 0};
+        let result = game.addPlayer('Timmy');
+
+        expect(result).toEqual(expected);
+        expect(game.getPlayers().length).toBe(1);
+    });
+
+    test("Add player test full", () => {
+        // Add 10 players to the game and verify that they are added
+        for (let i = 0; i < 10; i++) {
+            expect(game.addPlayer('Timmy')).not.toBeFalsy();
+        }
+        expect(game.addPlayer('Timmy')).toBeFalsy();        
+    });
 });
+
+describe('Game With Players Test', () => {
+    beforeEach(() => {
+        game = new Game('someID');
+        game.addPlayer('Timmy');
+    });
+})
