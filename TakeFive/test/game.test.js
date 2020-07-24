@@ -45,4 +45,21 @@ describe('Game With Players Test', () => {
         game = new Game('someID');
         game.addPlayer('Timmy');
     });
+
+    test('Give Players Cards Test', () => {
+        game.givePlayersCards();
+
+        expect(game.getPlayers()[0].getCards().length).toBe(10);
+    });
+
+    test('All Players Ready Test False', () => {
+        expect(game.allPlayersReady()).toBeFalsy();
+    });
+
+    test('Set Player Ready Test', () => {
+        // Make player 0 ready
+        game.setPlayerReady(0,true);
+        // Verify that all players in the game are ready
+        expect(game.allPlayersReady()).toBeTruthy();
+    });
 })

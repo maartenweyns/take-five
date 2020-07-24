@@ -15,7 +15,29 @@ const game = function (gameid) {
 
 game.prototype.getPlayers = function () {
     return this.players;
-}
+};
+
+game.prototype.startGame = function () {
+    // Set game state to ongoing
+    this.state = 'ongoing';
+    // Give all players cards
+    this.givePlayersCards();
+};
+
+game.prototype.setPlayerReady = function (pid, ready) {
+    if(this.players[pid] !== undefined) {
+        this.players[pid].setReady(ready);
+    }
+};
+
+game.prototype.allPlayersReady = function () {
+    for (let player of this.players) {
+        if (!player.isReady()) {
+            return false;
+        }
+    }
+    return true;
+};
 
 game.prototype.addPlayer = function (name) {
     if (this.players.length < 10) {
@@ -25,7 +47,7 @@ game.prototype.addPlayer = function (name) {
     } else {
         return false;
     }
-}
+};
 
 game.prototype.takeAvailableCard = function () {
     let card = Utils.randomFromInterval(1, 104);
@@ -44,10 +66,10 @@ game.prototype.removeCardFromAvailable = function (card) {
         return true;
     }
     return false;
-}
+};
 
 game.prototype.givePlayersCards = function () {
-    for (let player of players) {
+    for (let player of this.players) {
         if (player.online) {
             let cards = [];
             for (let i = 0; i < 10; i++) {

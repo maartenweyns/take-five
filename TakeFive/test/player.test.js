@@ -16,6 +16,7 @@ describe("General Functions Tests", () => {
         expect(player.getName()).toBe(expectedName);
         expect(player.id).toBe(expectedID);
         expect(player.isOnline()).toBeTruthy();
+        expect(player.isReady()).toBeFalsy();
     });
 
     test('Decrement Score Test', () => {
@@ -32,5 +33,15 @@ describe("General Functions Tests", () => {
         player.setCards([1,10,100,2,24,20]);
 
         expect(player.getCards()).toEqual(expectedCards);
+    });
+
+    test('Is Ready Test', () => {
+        // Make Player ready
+        player.setReady(true);
+        expect(player.isReady()).toBeTruthy();
+
+        // Make Player not ready
+        player.setReady(false);
+        expect(player.isReady()).toBeFalsy();
     });
 });

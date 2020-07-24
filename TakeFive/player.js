@@ -4,6 +4,7 @@ const player = function (name, playerid) {
     this.score = 66;
     this.cards = [];
     this.online = true;
+    this.ready = false;
 };
 
 player.prototype.getScore = function () {
@@ -16,6 +17,14 @@ player.prototype.getName = function () {
 
 player.prototype.isOnline = function () {
     return this.online;
+};
+
+player.prototype.isReady = function () {
+    return this.ready;
+};
+
+player.prototype.setReady = function (ready) {
+    this.ready = ready;
 };
 
 player.prototype.decrementScore = function (amount) {
