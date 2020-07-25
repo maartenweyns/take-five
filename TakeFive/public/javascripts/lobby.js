@@ -66,6 +66,16 @@ function setup(creating) {
         alert('This game is full!');
     });
 
+    socket.on('game-started', () => {
+        alert('This game has already started!');
+    });
+
+    socket.on('player-overview', (players) => {
+        for (let player of players) {
+            console.log('Player: ' + player.name);
+        }
+    });
+
     socket.on('information', (data) => {
         // Set the variables
         playerid = data.playerID;
@@ -77,11 +87,13 @@ function setup(creating) {
         document.getElementById('welcomebox').style.display = "none";
 
         // Setup the cookies
-        let expires = new Date();
-        expires.setDate(expires.getDate() + 8);
-        document.cookie = "playerID=" + playerID + "; expires=" + expires;
-        expires.setDate(expires.getDate() + 8);
-        document.cookie = "gameID=" + gameID + "; expires=" + expires;
+        localStorage.setItem("gameID", gameid);
+        localStorage.setItem("playerID", playerid);
 
+        console.info("Variable setup complete");
+    });
+
+    socket.on('game', () => {
+        window.location.pathname = '/play';
     });
 }

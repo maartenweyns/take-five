@@ -42,10 +42,6 @@ body {
   width: 100%;
 }
 
-.welcomebox h1 {
-  margin: 0;
-}
-
 .welcomebox span {
   font-weight: bold;
 }

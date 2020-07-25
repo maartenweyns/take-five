@@ -53,6 +53,10 @@ io.on('connection', (socket) => {
             socket.emit('invalid-game');
             return;
         }
+        if (game.state !== 'lobby') {
+            socket.emit('game-started');
+            return;
+        }
         let result = game.addPlayer(name);
 
         if (result === false) {
@@ -61,10 +65,45 @@ io.on('connection', (socket) => {
         } else {
             socket.emit('information', {playerID: result.id, gameID: gid});
             socket.join(gid);
+            io.in(gid).emit('player-overview', game.getPlayerInformation());
         }
     });
 
-    
+    socket.on('start-game', (gid) => {
+        let game = games.get(gid);
+        if (game === undefined) {
+            socket.emit('invalid-game');
+            return;
+        }
+
+        if (game.state === 'lobby') {
+            game.startGame();
+            io.in(gid).emit('game');
+            return;
+        } else {
+            socket.emit('game-started');
+            return;
+        }
+    });
+
+    socket.on('ingame-join', (data) => {
+        let gid = data.gid;
+        let pid = data.pid;
+
+        // Get the game associated with the gameid
+        let game = games.get(gid);
+
+        // Check if the game exists
+        if (game === undefined) {
+            socket.emit('lobby');
+            return;
+        }
+
+        // Join the socket in the game room
+        socket.join(gid);
+
+        
+    });
 });
 
 console.info('Starting serever on port ' + process.argv[2]);

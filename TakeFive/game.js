@@ -17,6 +17,14 @@ game.prototype.getPlayers = function () {
     return this.players;
 };
 
+game.prototype.getPlayerInformation = function () {
+    let returnvalue = [];
+    for (let player of this.players) {
+        returnvalue.push({name: player.getName(), score: player.getScore()});
+    }
+    return returnvalue;
+};
+
 game.prototype.startGame = function () {
     // Set game state to ongoing
     this.state = 'ongoing';
