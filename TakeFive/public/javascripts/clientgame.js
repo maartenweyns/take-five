@@ -27,7 +27,13 @@ function showOwnCards(cards) {
     // Create a new div for all cards
     for (let card of cards) {
         let cardDiv = document.createElement('div');
-        cardDiv.style.backgroundImage = `url(../images/cards/${card}.svg)`;
+        cardDiv.classList.add('ownCard');
+        let cardimg = document.createElement('img');
+        cardimg.src = `../images/cards/png/${card}.png`;
+        cardimg.classList.add('cardImage');
+        cardDiv.append(cardimg);
         container.append(cardDiv);
     }
+
+    console.log('Showing cards');
 }

@@ -102,7 +102,11 @@ io.on('connection', (socket) => {
         // Join the socket in the game room
         socket.join(gid);
 
+        let gamestatus = game.getStatus();
         
+        if (gamestatus === 'ongoing') {
+            socket.emit('own-cards', game.player(pid).getCards());
+        }
     });
 });
 

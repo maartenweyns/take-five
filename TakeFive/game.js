@@ -17,6 +17,14 @@ game.prototype.getPlayers = function () {
     return this.players;
 };
 
+game.prototype.getStatus = function () {
+    return this.state;
+};
+
+game.prototype.player = function(playerID) {
+    return this.players[playerID];
+}
+
 game.prototype.getPlayerInformation = function () {
     let returnvalue = [];
     for (let player of this.players) {
