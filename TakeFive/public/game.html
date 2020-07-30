@@ -1,34 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <!--Mobile-friendly HTML-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!--Game Title-->
+        <title>Take 5!</title>
+        <!--Game Icon-->
+        <link href="images/logos/game-icon.png" rel="icon" />
+        <!--Import Google Fonts-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
+            rel="stylesheet"
+        />
+        <!--Import materialize.css-->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="stylesheets/materialize.css"
+            media="screen,projection"
+        />
+        <!--Import Game Stylesheets-->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="stylesheets/game.css"
+            media="screen,projection"
+        />
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <!--Mobile-friendly HTML-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Game Title-->
-    <title>Take 5!</title>
-    <!--Game Icon-->
-    <link href="images/logos/game-icon.png" rel="icon" />
-    <!--Import Google Icon Font-->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="stylesheets/materialize.css" media="screen,projection" />
-    <!--Import Game Stylesheets-->
-    <link type="text/css" rel="stylesheet" href="stylesheets/game.css" media="screen,projection" />
-</head>
+    <body>
+        <div class="card users usersleft z-depth-2" id="usersleft">
+            <div class="userslot" id="user0"></div>
+            <div class="userslot" id="user1"></div>
+            <div class="userslot" id="user2"></div>
+            <div class="userslot" id="user3"></div>
+            <div class="userslot" id="user4"></div>
+            <div class="userslot" id="user5"></div>
+            <div class="userslot" id="user6"></div>
+            <div class="userslot" id="user7"></div>
+            <div class="userslot" id="user8"></div>
+            <div class="userslot" id="user9"></div>
+        </div>
+        <div class="playarea" id="playarea">
+            <div class="card board z-depth-2" id="board">
+                <div class="cardslot" id="card11"></div>
+                <div class="cardslot" id="card12"></div>
+                <div class="cardslot" id="card13"></div>
+                <div class="cardslot" id="card14"></div>
+                <div class="cardslot" id="card15"></div>
+                <div class="cardslot" id="card21"></div>
+                <div class="cardslot" id="card22"></div>
+                <div class="cardslot" id="card23"></div>
+                <div class="cardslot" id="card24"></div>
+                <div class="cardslot" id="card25"></div>
+                <div class="cardslot" id="card31"></div>
+                <div class="cardslot" id="card32"></div>
+                <div class="cardslot" id="card33"></div>
+                <div class="cardslot" id="card34"></div>
+                <div class="cardslot" id="card35"></div>
+                <div class="cardslot" id="card41"></div>
+                <div class="cardslot" id="card42"></div>
+                <div class="cardslot" id="card43"></div>
+                <div class="cardslot" id="card44"></div>
+                <div class="cardslot" id="card45"></div>
+            </div>
 
-<body>
-    <div class="centercontent" id="centercontent">
-        <div class="owncards" id="owncardscontainer"></div>
-    </div>
+            <div class="owncards" id="owncardscontainer"></div>
+        </div>
 
-    <!--SocketIO JavaScript-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
-        integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo=" crossorigin="anonymous"></script>
-    <!--JavaScript of MaterializeCSS-->
-    <script type="text/javascript" src="javascripts/materialize.min.js"></script>
-    <!--Lobby-Specific Javascript-->
-    <script type="text/javascript" src="javascripts/clientgame.js"></script>
-</body>
-
+        <!--SocketIO JavaScript-->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+            integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo="
+            crossorigin="anonymous"
+        ></script>
+        <!--JavaScript of MaterializeCSS-->
+        <script type="text/javascript" src="javascripts/materialize.min.js"></script>
+        <!--Lobby-Specific Javascript-->
+        <script type="text/javascript" src="javascripts/clientgame.js"></script>
+    </body>
 </html>

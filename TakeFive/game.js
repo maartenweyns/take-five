@@ -11,6 +11,8 @@ const game = function (gameid) {
     this.availableCards = Utils.allCards;
     // Set the state to "lobby"
     this.state = "lobby";
+    // Starting cards
+    this.firstCards = [];
 };
 
 game.prototype.getPlayers = function () {
@@ -21,9 +23,13 @@ game.prototype.getStatus = function () {
     return this.state;
 };
 
+game.prototype.getFirstCards = function () {
+    return this.firstCards;
+}
+
 game.prototype.player = function(playerID) {
     return this.players[playerID];
-}
+};
 
 game.prototype.getPlayerInformation = function () {
     let returnvalue = [];
@@ -38,6 +44,10 @@ game.prototype.startGame = function () {
     this.state = 'ongoing';
     // Give all players cards
     this.givePlayersCards();
+    // Get starting cards
+    for(let i = 0; i < 4; i++) {
+        this.firstCards.push(this.takeAvailableCard());
+    }
 };
 
 game.prototype.setPlayerReady = function (pid, ready) {

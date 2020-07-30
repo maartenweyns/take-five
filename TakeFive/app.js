@@ -105,7 +105,12 @@ io.on('connection', (socket) => {
         let gamestatus = game.getStatus();
         
         if (gamestatus === 'ongoing') {
+            // Send the player information
+            socket.emit('player-overview', game.getPlayerInformation());
+            // Send the player's cards
             socket.emit('own-cards', game.player(pid).getCards());
+            // Send the first col's cards
+            socket.emit('first-col-cards', game.getFirstCards());
         }
     });
 });
