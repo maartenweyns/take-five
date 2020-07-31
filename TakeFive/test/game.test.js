@@ -62,4 +62,21 @@ describe('Game With Players Test', () => {
         // Verify that all players in the game are ready
         expect(game.allPlayersReady()).toBeTruthy();
     });
-})
+});
+
+describe('Game Started Test', () => {
+    beforeEach(() => {
+        game = new Game('someID');
+        game.addPlayer('Timmy');
+        game.startGame();
+    });
+
+    test('Get minimum of first cards test', () => {
+        let returned = game.getSmallestRowBeginning();
+        let array = game.getFirstCards();
+
+        for(let number of array) {
+            expect(returned <= number).toBeTruthy();
+        }
+    });
+});

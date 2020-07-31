@@ -11,21 +11,30 @@ const game = function (gameid) {
     this.availableCards = Utils.allCards;
     // Set the state to "lobby"
     this.state = "lobby";
-    // Starting cards
-    this.firstCards = [];
+    // The game board
+    this.row0 = [];
+    this.row1 = [];
+    this.row2 = [];
+    this.row3 = [];
+    // Store the selected cards at the end of a round
+    this.selectedCards = [];
+};
+
+game.prototype.getID = function () {
+    return this.id;
 };
 
 game.prototype.getPlayers = function () {
     return this.players;
 };
 
+game.prototype.getOpenCards = function () {
+    return [this.row0, this.row1, this.row2, this.row3];
+};
+
 game.prototype.getStatus = function () {
     return this.state;
 };
-
-game.prototype.getFirstCards = function () {
-    return this.firstCards;
-}
 
 game.prototype.player = function(playerID) {
     return this.players[playerID];
@@ -46,7 +55,7 @@ game.prototype.startGame = function () {
     this.givePlayersCards();
     // Get starting cards
     for(let i = 0; i < 4; i++) {
-        this.firstCards.push(this.takeAvailableCard());
+        this[`row${i}`].push(this.takeAvailableCard());
     }
 };
 
@@ -106,5 +115,52 @@ game.prototype.givePlayersCards = function () {
         }
     }
 };
+
+game.prototype.finishRound = function () {
+    for (let player of this.players) {
+        this.selectedCards.push({pid: player.getID(), name: player.getName(), num: player.getSelectedCard()});
+    }
+    this.selectedCards.sort(compareNumReverse);
+};
+
+game.prototype.getSelectedCards = function () {
+    return this.selectedCards;
+};
+
+game.prototype.getSmallestRowBeginning = function () {
+    return Math.min(this.row0[0], this.row1[0], this.row2[0], this.row3[0]);
+};
+
+game.prototype.determineRowForCard = function (card) {
+    console.log(`[INFO] Determining location for ${card}`)
+
+    let lowestDifference = 999;
+    let rownum = 999;
+    for (let i = 0; i < 4; i++) {
+        let row = this[`row${i}`];
+        // Get the last number of the row
+        let number = row.pop()
+        row.push(number);
+        // Get the absolute value of the difference
+        let difference = card - number;
+        // Set the minimal difference to the new minimum
+        if (difference > 0 && difference < lowestDifference) {
+            lowestDifference = difference;
+            // Set the row to the row containing the minimal difference
+            rownum = i;
+        }
+    }
+    return rownum;
+};
+
+function compareNumReverse(a, b) {
+    if (a.num < b.num) {
+        return 1;
+    }
+    if (a.num > b.num) {
+        return -1;
+    }
+    return 0;
+}
 
 module.exports = game;

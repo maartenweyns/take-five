@@ -19,7 +19,7 @@ body {
 
 body .owncards {
   width: 80vw;
-  height: calc((1/6) * 100vh);
+  height: calc((1 / 6) * 100vh);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -38,55 +38,7 @@ body .owncards {
   right: 0;
 }
 
-.users {
-  width: calc(20vw - 40px);
-  height: calc(100vh - 40px);
-  margin: 20px;
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 100%;
-      grid-template-columns: 100%;
-  grid-auto-rows: 1fr;
-}
-
-.users .userslot {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background-color: #eeeeee;
-  margin: 10px;
-  border-radius: 5px;
-  padding: 0 10px;
-}
-
-.users .userslot p {
-  margin: 0;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-}
-
-.users .userslot .score {
-  font-family: 'Russo One', sans-serif;
-  font-size: 200%;
-}
-
-.users .userslot .name {
-  font-size: 100%;
-}
-
-.ownCard {
+body .owncards .ownCard {
   -webkit-transition: 100ms;
   transition: 100ms;
   -webkit-user-select: none;
@@ -101,9 +53,18 @@ body .owncards {
   border-radius: 5px;
   -webkit-transform: translateY(20px);
           transform: translateY(20px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-.ownCard .cardImage {
+body .owncards .ownCard .cardImage {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -112,18 +73,92 @@ body .owncards {
   max-height: 100%;
 }
 
-.ownCard:hover {
+body .owncards .ownCard:hover {
   -webkit-transform: translateY(0);
           transform: translateY(0);
   z-index: 99;
 }
 
-.selected {
+body .owncards .selected {
   -webkit-transform: translateY(0);
           transform: translateY(0);
   z-index: 99;
   -webkit-box-shadow: 0px 0px 10px 0px #00a400;
           box-shadow: 0px 0px 10px 0px #00a400;
+}
+
+body .owncards .btn-floating {
+  position: absolute;
+  top: 50%;
+  margin-top: -25%;
+  left: 50%;
+  margin-left: -25%;
+}
+
+.users {
+  width: calc(20vw - 40px);
+  height: calc(100vh - 40px);
+  margin: 20px;
+  padding: 10px;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 100%;
+      grid-template-columns: 100%;
+  grid-auto-rows: 1fr;
+}
+
+.users .userslot {
+  -webkit-transition: 100ms;
+  transition: 100ms;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
+
+.users .userslot p {
+  margin: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.users .userslot .score, .users .userslot .cardname {
+  font-family: "Russo One", sans-serif;
+  font-size: 3vw;
+}
+
+.users .userslot .name {
+  font-size: 1.5vw;
+}
+
+.users .userslot .cardname {
+  font-family: "Russo One", sans-serif;
+  font-size: 1.5vw;
+}
+
+.users .cardimage {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  background-color: white;
+  max-width: 100%;
 }
 
 .playarea {
@@ -134,7 +169,7 @@ body .owncards {
 
 .playarea .board {
   width: calc(100% - 40px);
-  height: calc(((5/6) * 100vh) - 40px);
+  height: calc(((5 / 6) * 100vh) - 40px);
   margin: 20px;
   display: -ms-grid;
   display: grid;
@@ -157,13 +192,55 @@ body .owncards {
   background-repeat: no-repeat;
   margin: 10px;
   border-radius: 5px;
-  width: calc(0.706650831 * ((1/6)*100vh));
-  height: calc((1/6)*100vh);
+  width: calc(0.706650831 * ((1 / 6) * 100vh));
+  height: calc((1 / 6) * 100vh);
 }
 
 .playarea .board .cardslot:hover {
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24), 0 1px 5px 0 rgba(0, 0, 0, 0.4);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24), 0 1px 5px 0 rgba(0, 0, 0, 0.4);
   background-color: #eeeeee;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2020-7-31 14:27:19
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info. 
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+/**
+ * ----------------------------------------
+ * animation flip-in-hor-top
+ * ----------------------------------------
+ */
+.flip-in-hor-top {
+  -webkit-animation: flip-in-hor-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation: flip-in-hor-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@-webkit-keyframes flip-in-hor-top {
+  0% {
+    -webkit-transform: rotateX(-80deg);
+    transform: rotateX(-80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateX(0);
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes flip-in-hor-top {
+  0% {
+    -webkit-transform: rotateX(-80deg);
+    transform: rotateX(-80deg);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: rotateX(0);
+    transform: rotateX(0);
+    opacity: 1;
+  }
 }
 /*# sourceMappingURL=game.css.map */

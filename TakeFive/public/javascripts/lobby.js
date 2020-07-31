@@ -44,6 +44,7 @@ function setup(creating) {
         return;
     } else {
         nameentered = document.getElementById('player_name').value;
+        gameid = document.getElementById('game_code').value;
     }
 
     socket = io(location.host);
