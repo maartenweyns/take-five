@@ -7,6 +7,15 @@ describe('General Functionality Tests', () => {
         game = new Game('someID');
     });
 
+    test('Get GameID Test', () => {
+        let id = 'someID';
+        expect(game.getID()).toEqual(id);
+    });
+
+    test('Game State not Started Test', () => {
+        expect(game.getStatus()).toEqual('lobby');
+    });
+
     test('Get Available Card Test', () => {
         let card = game.takeAvailableCard();
 
@@ -71,12 +80,49 @@ describe('Game Started Test', () => {
         game.startGame();
     });
 
+    test('Game State Started Test', () => {
+        expect(game.getStatus()).toEqual('ongoing');
+    });
+
     test('Get minimum of first cards test', () => {
         let returned = game.getSmallestRowBeginning();
-        let array = game.getFirstCards();
+        let firstCards = [game.row0[0], game.row1[0], game.row2[0], game.row3[0]];
 
-        for(let number of array) {
+        for(let number of firstCards) {
             expect(returned <= number).toBeTruthy();
         }
+    });
+
+    test('Place Card on Row Test', () => {
+        // Set the rows of the games to known cards
+        game.row0 = [12];
+        game.row1 = [24];
+        game.row2 = [36];
+        game.row3 = [85];
+
+        // Place card 23 on the correct row (0)
+        game.placeCardOnRow(23);
+        // Place card 35 on the correct row (1)
+        game.placeCardOnRow(35);
+
+        expect(game.row0).toEqual([12, 23]);
+        expect(game.row1).toEqual([24, 35]);
+        expect(game.row2).toEqual([36]);
+        expect(game.row3).toEqual([85]);
+    });
+
+    test('Add Card to Row Test', () => {
+        // Set the rows of the games to known cards
+        game.row0 = [12];
+        game.row1 = [24];
+        game.row2 = [36];
+        game.row3 = [85];
+
+        // Try a nonexisting row
+        expect(game.addCardToRow(23, 5)).toBeFalsy();
+
+        // Try an existing row
+        expect(game.addCardToRow(23, 3)).toBeTruthy();
+        expect(game.row3).toEqual([85, 23]);
     });
 });

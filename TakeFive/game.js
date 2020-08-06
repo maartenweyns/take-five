@@ -20,22 +20,44 @@ const game = function (gameid) {
     this.selectedCards = [];
 };
 
+/**
+ * This function returns the ID of the game.
+ * @returns {string} The gameID of the current game
+ */
 game.prototype.getID = function () {
     return this.id;
 };
 
+/**
+ * This function will return the array of players currently in the game.
+ * @returns {array} The array of users in the game
+ */
 game.prototype.getPlayers = function () {
     return this.players;
 };
 
+/**
+ * This function will construct and return a 2D array of all the open cards.
+ * @returns {array} An array which has the rows of cards as its elements
+ */
 game.prototype.getOpenCards = function () {
     return [this.row0, this.row1, this.row2, this.row3];
 };
 
+/**
+ * This function returns the game state at this moment in time
+ * @returns {string} "lobby" if the game has not started yet, "ongoing" if it has
+ */
 game.prototype.getStatus = function () {
     return this.state;
 };
 
+/**
+ * This function returns the player object of the player with the ID specified.
+ * Calling this function allows to execute functions on the player object as if you were accessing this object directly.
+ * @param {number} playerID The ID of the player.
+ * @returns {object} The player object of the player with the provided ID.
+ */
 game.prototype.player = function(playerID) {
     return this.players[playerID];
 };
@@ -127,15 +149,21 @@ game.prototype.getSelectedCards = function () {
     return this.selectedCards;
 };
 
+/**
+ * This function return the smallest card form the game (i.e. the smallest card of the first cards of all rows).
+ * @returns {number} The smallest card of the game.
+ */
 game.prototype.getSmallestRowBeginning = function () {
     return Math.min(this.row0[0], this.row1[0], this.row2[0], this.row3[0]);
 };
 
-game.prototype.determineRowForCard = function (card) {
-    console.log(`[INFO] Determining location for ${card}`)
-
+/**
+ * This function will look for the correct row on which to place the given card and it will place it there.
+ * @param {number} card The card to place on the correct row.
+ */
+game.prototype.placeCardOnRow = function (card) {
     let lowestDifference = 999;
-    let rownum = 999;
+    let rownum = -1;
     for (let i = 0; i < 4; i++) {
         let row = this[`row${i}`];
         // Get the last number of the row
@@ -150,7 +178,25 @@ game.prototype.determineRowForCard = function (card) {
             rownum = i;
         }
     }
-    return rownum;
+    if (this.addCardToRow(card, rownum)) {
+        return rownum;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * This function adds a card to the given row (0, 1, 2 or 3).
+ * This function does not check for the validity of this move.
+ * @param {number} card The card to add to the given row
+ * @param {number} row The row to which to add the card
+ */
+game.prototype.addCardToRow = function (card, row) {
+    if (row < 0 || row > 3) {
+        return false;
+    }
+    this[`row${row}`].push(card);
+    return true;
 };
 
 function compareNumReverse(a, b) {

@@ -19,7 +19,7 @@ socket = io(location.host);
         showOwnCards(cards);
     });
 
-    socket.on("first-col-cards", (cards) => {
+    socket.on("open-cards", (cards) => {
         drawOpenCards(cards);
     });
 
@@ -154,12 +154,12 @@ function drawOpenCards(cards) {
 
 /**
  * This function hides all cards except the one the user selected.
- * @param {Number} card The card not to hide
+ * @param {Number} num The card not to hide
  */
-function hideCards(card) {
+function hideCards(num) {
     let cards = document.getElementsByClassName("ownCard");
     for (let card of cards) {
-        if (!card.classList.contains("selected")) {
+        if (Number(card.getAttribute('num')) !== num) {
             card.style.opacity = 0;
             setTimeout(function () {
                 card.style.display = "none";
@@ -202,4 +202,20 @@ function showEndCard(data) {
     console.log("Row " + data.row);
 
     container.append(card, userslot);
+}
+
+/**
+ * This function will update a user's score on screen.
+ * @param {*} scoreElem The score element of the user
+ * @param {*} newScore The new score to show
+ */
+function decrementScore(scoreElem, newScore) {
+    let difference = Number(scoreElem.innerText) - newScore;
+    let i = 0;
+    while (i < difference) {
+        setTimeout(function() {
+            scoreElem.innerText = Number(scoreElem.innerText) - 1;
+        }, 10 * i);
+        i++;
+    }
 }

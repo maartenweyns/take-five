@@ -111,7 +111,7 @@ io.on("connection", (socket) => {
             // Send the player's cards
             socket.emit("own-cards", game.player(pid).getCards());
             // Send the open cards
-            socket.emit("first-col-cards", game.getOpenCards());
+            socket.emit("open-cards", game.getOpenCards());
         }
     });
 
@@ -133,7 +133,9 @@ io.on("connection", (socket) => {
             game.finishRound();
             io.in(game.getID()).emit("finish-round");
 
-            endOfRound(io, game);
+            setTimeout(function () {
+                endOfRound(io, game);
+            }, 1000);
         }
     });
 });
@@ -145,7 +147,9 @@ io.on("connection", (socket) => {
  */
 function endOfRound(io, game) {
     if (game.getSelectedCards().length === 0) {
-        io.in(game.getID()).emit("end-round-score");
+        setTimeout(function () {
+            io.in(game.getID()).emit("end-round-score");
+        }, 1000);
         return;
     }
     let selection = game.selectedCards.pop();
@@ -154,9 +158,10 @@ function endOfRound(io, game) {
         sendEndOfRoundCard(io.in(game.getID()), selection, -1);
         return;
     } else {
-        let row = game.determineRowForCard(selection.num);
+        let row = game.placeCardOnRow(selection.num);
         sendEndOfRoundCard(io.in(game.getID()), selection, row);
         setTimeout(function () {
+            io.in(game.getID()).emit("open-cards", game.getOpenCards());
             endOfRound(io, game);
         }, 2000);
     }

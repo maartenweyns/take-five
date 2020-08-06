@@ -59,15 +59,13 @@ body {
         }
         .selected {
             transform: translateY(0);
-            z-index: 99;
+            z-index: 98;
             box-shadow: 0px 0px 10px 0px #00a400;
         }
         .btn-floating {
             position: absolute;
-            top: 50%;
-            margin-top: -25%;
-            left: 50%;
-            margin-left: -25%;
+            top: -10%;
+            right: -10%;
         }
     }
 }
