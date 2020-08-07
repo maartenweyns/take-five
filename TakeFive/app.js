@@ -138,6 +138,17 @@ io.on("connection", (socket) => {
             }, 1000);
         }
     });
+
+    socket.on("confirm-row-choice", (data) => {
+        let pid = data.pid;
+        let row = data.row;
+        if (pid !== game.getChoosingRow()) {
+            return;
+        }
+        if (row !== undefined) {
+            game.playerTookRow(pid, row, game.selectedCards.pop());
+        }
+    });
 });
 
 /**
@@ -155,7 +166,13 @@ function endOfRound(io, game) {
     let selection = game.selectedCards.pop();
 
     if (selection.num < game.getSmallestRowBeginning()) {
+        // The card requires the player to choose a row.
+        game.setChoosingRow(selection.pid);
         sendEndOfRoundCard(io.in(game.getID()), selection, -1);
+
+        // Push the card to the stack so that we can replace the row with this card
+        game.selectedCards.push(selection);
+
         return;
     } else {
         let row = game.placeCardOnRow(selection.num);

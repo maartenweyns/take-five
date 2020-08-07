@@ -47,6 +47,20 @@ describe('General Functionality Tests', () => {
         }
         expect(game.addPlayer('Timmy')).toBeFalsy();        
     });
+
+    test('Calculate Penalty Points Test', () => {
+        /**
+         * This row should be 18 points
+         * 2 = 1 point
+         * 5 = 2 points
+         * 10 = 3 points
+         * 33 = 5 point
+         * 55 = 7 points
+         */
+        let row0 = [2, 5, 10,33,55];
+
+        expect(game.calculatePenalty(row0)).toEqual(18);
+    });
 });
 
 describe('Game With Players Test', () => {

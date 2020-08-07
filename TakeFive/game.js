@@ -18,6 +18,8 @@ const game = function (gameid) {
     this.row3 = [];
     // Store the selected cards at the end of a round
     this.selectedCards = [];
+    // Indicate who has to choose a row, or -1 if nobody should
+    this.choosingRow = -1;
 };
 
 /**
@@ -69,6 +71,14 @@ game.prototype.getPlayerInformation = function () {
     }
     return returnvalue;
 };
+
+game.prototype.setChoosingRow = function (pid) {
+    this.choosingRow = pid;
+};
+
+game.prototype.getChoosingRow = function () {
+    return this.choosingRow;
+}
 
 game.prototype.startGame = function () {
     // Set game state to ongoing
@@ -183,6 +193,44 @@ game.prototype.placeCardOnRow = function (card) {
     } else {
         return false;
     }
+};
+
+game.prototype.playerTookRow = function (pid, row, card) {
+    if (0 <= row < 4) {
+        // Calculate the penalty for taking the row
+        let penalty = this.calculatePenalty(this[`row${row}`]);
+        // Decrement the players score with the penalty
+        this.player(pid).decrementScore(penalty);
+        
+    }
+};
+
+/**
+ * This method will calculate the total amount of penalty points of a row
+ * @param {array} row The row of card to calculate the penalty of
+ */
+game.prototype.calculatePenalty = function (row) {
+    let penalty = 0;
+    for (let card of row) {
+        if (card % 55 === 0) {
+            penalty += 7;
+            continue;
+        }
+        if (card % 11 === 0) {
+            penalty += 5;
+            continue;
+        }
+        if (card % 10 === 0) {
+            penalty += 3;
+            continue;
+        }
+        if (card % 5 === 0) {
+            penalty += 2;
+            continue;
+        }
+        penalty += 1;
+    }
+    return penalty;
 };
 
 /**

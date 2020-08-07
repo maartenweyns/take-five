@@ -139,6 +139,10 @@ function confirmSelection() {
     socket.emit("confirm-selection", { pid: playerid, card: card });
 }
 
+/**
+ * This function will draw an array of cards on the screen
+ * @param {array} cards The rows of cards to draw
+ */
 function drawOpenCards(cards) {
     if (cards.length !== 4) {
         M.toast({ html: "Something went wrong!" });
@@ -148,7 +152,14 @@ function drawOpenCards(cards) {
             let container = document.getElementById(`card${i + 1}${j + 1}`);
             container.setAttribute("num", cards[i][j]);
             container.style.backgroundImage = `url(../images/cards/png/${cards[i][j]}.png)`;
+            container.onclick = function () {chooseRow(i)};
         }
+    }
+}
+
+function chooseRow(row) {
+    if (0 <= row <= 4) {
+        socket.emit("confirm-row-choice", {pid: playerid, row: row});
     }
 }
 
@@ -184,6 +195,9 @@ function hidePlayers() {
 }
 
 function showEndCard(data) {
+    if (data.row === -1) {
+        M.toast({html: "Choose a row by clicking on its first card!"});
+    };
     let container = document.getElementById("usersleft");
     container.innerHTML = "";
 
@@ -198,8 +212,6 @@ function showEndCard(data) {
     card.src = `../images/cards/png/${data.card}.png`;
     card.classList.add("cardimage");
     card.classList.add("flip-in-hor-top");
-
-    console.log("Row " + data.row);
 
     container.append(card, userslot);
 }
