@@ -28,11 +28,11 @@
     <body>
         <div class="card z-depth-3 welcomebox" id="welcomebox">
             <div class="pname input-field" id="pname" style="display: none;">
-                <input id="player_name" type="text" class="validate" maxlength="10" onkeypress="return AvoidSpace(event)" />
+                <input id="player_name" autocomplete="off" type="text" class="validate" maxlength="10" onkeypress="return AvoidSpace(event)" />
                 <label for="player_name">Your Name</label>
             </div>
             <div class="gcode input-field" id="gcode" style="display: none;">
-                <input id="game_code" type="text" class="validate" maxlength="6" onkeypress="return AvoidSpace(event)"/>
+                <input id="game_code" autocomplete="off" type="text" class="validate" maxlength="6" onkeypress="return AvoidSpace(event)"/>
                 <label for="game_code">Game Code</label>
             </div>
             <a id="joinButton" class="blue waves-effect waves-light btn" onclick="create(false);"

@@ -47,6 +47,7 @@ io.on("connection", (socket) => {
     socket.on("player-name", (data) => {
         let name = data.name;
         let gid = data.gid;
+        let sid = socket.id;
 
         let game = games.get(gid);
 
@@ -58,7 +59,7 @@ io.on("connection", (socket) => {
             socket.emit("game-started");
             return;
         }
-        let result = game.addPlayer(name);
+        let result = game.addPlayer(name, sid);
 
         if (result === false) {
             socket.emit("game-full");
@@ -102,6 +103,8 @@ io.on("connection", (socket) => {
 
         // Join the socket in the game room
         socket.join(gid);
+        // Update the player's socketid
+        game.player(pid).updateSocketID(socket.id);
 
         let gamestatus = game.getStatus();
 
@@ -134,64 +137,82 @@ io.on("connection", (socket) => {
             io.in(game.getID()).emit("finish-round");
 
             setTimeout(function () {
-                endOfRound(io, game);
+                allPlayersChose(game);
             }, 1000);
         }
     });
 
     socket.on("confirm-row-choice", (data) => {
+        console.log(`Player chose row ${data.row}`);
+        let game = games.get(Object.keys(socket.rooms)[1]);
+
+        if (game === undefined) {
+            socket.emit("lobby");
+            return;
+        }
+
         let pid = data.pid;
         let row = data.row;
         if (pid !== game.getChoosingRow()) {
+            console.log(`This player should not be choosing a row, but ${game.getChoosingRow()} should`);
             return;
         }
         if (row !== undefined) {
-            game.playerTookRow(pid, row, game.selectedCards.pop());
+            game.setChoosingRow(-1);
+            game.playerTookRow(pid, row, game.selectedCards.pop().num);
+            io.in(game.getID()).emit("open-cards", game.getOpenCards());
+            allPlayersChose(game);
         }
     });
 });
 
 /**
  * This function takes the first card from the selected array or sends a message when it's empty
- * @param {*} io The socket.io instance to communicate over
- * @param {*} game The game of which we are ending a round
+ * @param {object} io The socket.io instance to communicate over
+ * @param {object} game The game of which we are ending a round
  */
-function endOfRound(io, game) {
+function allPlayersChose(game) {
     if (game.getSelectedCards().length === 0) {
         setTimeout(function () {
-            io.in(game.getID()).emit("end-round-score");
+            // Send the player information
+            io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
+            // Set all players to not ready
+            game.setAllPlayersReady(false);
+            // Send the cards to each player
+            let players = game.getPlayers();
+            for (let player of players) {
+                io.to(player.getSocketID()).emit("own-cards", game.player(player.getID()).getCards());
+            }
         }, 1000);
         return;
     }
     let selection = game.selectedCards.pop();
 
-    if (selection.num < game.getSmallestRowBeginning()) {
+    if (selection.num < game.getSmallestCard()) {
         // The card requires the player to choose a row.
         game.setChoosingRow(selection.pid);
-        sendEndOfRoundCard(io.in(game.getID()), selection, -1);
+        sendPlayerCard(io.in(game.getID()), selection, -1);
 
         // Push the card to the stack so that we can replace the row with this card
         game.selectedCards.push(selection);
 
         return;
     } else {
-        let row = game.placeCardOnRow(selection.num);
-        sendEndOfRoundCard(io.in(game.getID()), selection, row);
+        let row = game.placeCardOnRow(selection.num, selection.pid);
+        sendPlayerCard(io.in(game.getID()), selection);
         setTimeout(function () {
-            io.in(game.getID()).emit("open-cards", game.getOpenCards());
-            endOfRound(io, game);
+            io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
+            allPlayersChose(game);
         }, 2000);
     }
 }
 
 /**
  * This function sends a card to all players
- * @param {*} room The socket.io room to send emit to
- * @param {*} card The card number to send
- * @param {*} player The playerid of the player that chose the card
- * @param {*} row Which row this cards belongs into, -1 if the card is lower than any card on the board
+ * @param {string} room The socket.io room to send emit to
+ * @param {object} selection The card that was selected
  */
-function sendEndOfRoundCard(room, selection, row) {
+function sendPlayerCard(room, selection, row) {
     room.emit("end-round-card", {
         pid: selection.pid,
         card: selection.num,

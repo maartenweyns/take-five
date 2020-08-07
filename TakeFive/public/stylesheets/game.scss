@@ -165,8 +165,7 @@ body {
     -webkit-animation: flip-in-hor-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     animation: flip-in-hor-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
-
-@-webkit-keyframes flip-in-hor-top {
+@keyframes flip-in-hor-top {
     0% {
         -webkit-transform: rotateX(-80deg);
         transform: rotateX(-80deg);
@@ -178,15 +177,21 @@ body {
         opacity: 1;
     }
 }
-@keyframes flip-in-hor-top {
+
+@keyframes popcard {
     0% {
-        -webkit-transform: rotateX(-80deg);
-        transform: rotateX(-80deg);
-        opacity: 0;
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.2);
+    }
+    50% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.2);
     }
     100% {
-        -webkit-transform: rotateX(0);
-        transform: rotateX(0);
-        opacity: 1;
+        transform: scale(1);
     }
 }

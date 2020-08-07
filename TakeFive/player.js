@@ -1,15 +1,24 @@
-const player = function (name, playerid) {
+const player = function (name, playerid, socketid) {
     this.name = name;
     this.id = playerid;
+    this.socketid = socketid;
     this.score = 66;
     this.cards = [];
     this.online = true;
     this.ready = false;
     this.selectedCard = 0;
+
+    // Initialize a penalty cards array
+    this.penaltyCards = [];
+    this.scoreWillChange = false;
 };
 
 player.prototype.getID = function () {
     return this.id;
+};
+
+player.prototype.getSocketID = function () {
+    return this.socketid;
 };
 
 player.prototype.getScore = function () {
@@ -18,6 +27,22 @@ player.prototype.getScore = function () {
 
 player.prototype.getName = function () {
     return this.name;
+};
+
+player.prototype.getPenaltyCards = function () {
+    return this.penaltyCards;
+};
+
+player.prototype.resetPenaltyCards = function () {
+    this.penaltyCards = [];
+};
+
+/**
+ * This function returns whether or not the score of the player will change
+ * @returns {boolean} True if the player's score will change, false if it won't
+ */
+player.prototype.getScoreChanging = function () {
+    return this.penaltyCards.length !== 0;
 };
 
 player.prototype.isOnline = function () {
@@ -58,6 +83,20 @@ player.prototype.setCards = function (array) {
 
 player.prototype.getCards = function () {
     return this.cards;
+};
+
+player.prototype.updateSocketID = function (sid) {
+    this.socketid = sid;
+};
+
+/**
+ * This method will add provided cards to the array of penalty cards for a given user.
+ * @param {array} cards The array of cards to add as penalty cards.
+ */
+player.prototype.addPenaltyCards = function (cards) {
+    for (let card of cards) {
+        this.penaltyCards.push(card);
+    }
 };
 
 module.exports = player;

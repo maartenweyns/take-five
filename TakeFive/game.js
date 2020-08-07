@@ -20,6 +20,8 @@ const game = function (gameid) {
     this.selectedCards = [];
     // Indicate who has to choose a row, or -1 if nobody should
     this.choosingRow = -1;
+    // The card that has last changed
+    this.lastChangedCard = 0;
 };
 
 /**
@@ -43,7 +45,7 @@ game.prototype.getPlayers = function () {
  * @returns {array} An array which has the rows of cards as its elements
  */
 game.prototype.getOpenCards = function () {
-    return [this.row0, this.row1, this.row2, this.row3];
+    return {cards: [this.row0, this.row1, this.row2, this.row3], last: this.lastChangedCard};
 };
 
 /**
@@ -67,7 +69,7 @@ game.prototype.player = function(playerID) {
 game.prototype.getPlayerInformation = function () {
     let returnvalue = [];
     for (let player of this.players) {
-        returnvalue.push({name: player.getName(), score: player.getScore()});
+        returnvalue.push({name: player.getName(), score: player.getScore(), penalty: player.getScoreChanging()});
     }
     return returnvalue;
 };
@@ -106,9 +108,9 @@ game.prototype.allPlayersReady = function () {
     return true;
 };
 
-game.prototype.addPlayer = function (name) {
+game.prototype.addPlayer = function (name, sid) {
     if (this.players.length < 10) {
-        let player = new Player(name, this.players.length);
+        let player = new Player(name, this.players.length, sid);
         this.players.push(player);
         return {id: player.id};
     } else {
@@ -148,6 +150,14 @@ game.prototype.givePlayersCards = function () {
     }
 };
 
+game.prototype.getScores = function () {
+    let array = [];
+    for (let player of this.players) {
+        array.push({pid: player.getID(), score: player.getScore(), penalty: player.getScoreChanging()});
+    }
+    return array;
+};
+
 game.prototype.finishRound = function () {
     for (let player of this.players) {
         this.selectedCards.push({pid: player.getID(), name: player.getName(), num: player.getSelectedCard()});
@@ -160,33 +170,40 @@ game.prototype.getSelectedCards = function () {
 };
 
 /**
- * This function return the smallest card form the game (i.e. the smallest card of the first cards of all rows).
+ * This function return the smallest card form the game (i.e. the smallest card of the last cards of each row).
  * @returns {number} The smallest card of the game.
  */
-game.prototype.getSmallestRowBeginning = function () {
-    return Math.min(this.row0[0], this.row1[0], this.row2[0], this.row3[0]);
+game.prototype.getSmallestCard = function () {
+    return Math.min(this.row0[this.row0.length - 1], this.row1[this.row1.length - 1], this.row2[this.row2.length - 1], this.row3[this.row3.length - 1]);
 };
 
 /**
  * This function will look for the correct row on which to place the given card and it will place it there.
  * @param {number} card The card to place on the correct row.
+ * @param {number} pid The playerID used if the row was already full.
+ * @returns {number} The rownumber if it has succeded or false if it failed.
  */
-game.prototype.placeCardOnRow = function (card) {
+game.prototype.placeCardOnRow = function (card, pid) {
     let lowestDifference = 999;
     let rownum = -1;
     for (let i = 0; i < 4; i++) {
         let row = this[`row${i}`];
         // Get the last number of the row
-        let number = row.pop()
-        row.push(number);
+        let number = row[row.length - 1];
+
         // Get the absolute value of the difference
         let difference = card - number;
+
         // Set the minimal difference to the new minimum
         if (difference > 0 && difference < lowestDifference) {
             lowestDifference = difference;
             // Set the row to the row containing the minimal difference
             rownum = i;
         }
+    }
+    if (this[`row${rownum}`].length >= 5) {
+        this.playerTookRow(pid, rownum, card);
+        return rownum;
     }
     if (this.addCardToRow(card, rownum)) {
         return rownum;
@@ -195,13 +212,23 @@ game.prototype.placeCardOnRow = function (card) {
     }
 };
 
+/**
+ * This method will add the provided row of card as penalty cards and replace the row with the card of the player.
+ * @param {number} pid The ID of the player
+ * @param {number} row The row the player took
+ * @param {number} card The card the player is placing
+ */
 game.prototype.playerTookRow = function (pid, row, card) {
     if (0 <= row < 4) {
-        // Calculate the penalty for taking the row
-        let penalty = this.calculatePenalty(this[`row${row}`]);
-        // Decrement the players score with the penalty
-        this.player(pid).decrementScore(penalty);
-        
+        // Add the cards of that row back to the available playing cards
+        for (let card of this[`row${row}`]) {
+            this.availableCards.push(card);
+        }
+        // Add cards from the row to the players penaly cards
+        this.player(pid).addPenaltyCards(this[`row${row}`]);
+        // Set the row as the new card
+        this[`row${row}`] = [card];
+        this.lastChangedCard = card;
     }
 };
 
@@ -234,6 +261,16 @@ game.prototype.calculatePenalty = function (row) {
 };
 
 /**
+ * This function will change the ready state of all players at once.
+ * @param {boolean} ready Whether or not the players should be ready
+ */
+game.prototype.setAllPlayersReady = function (ready) {
+    for (let player of this.players) {
+        player.setReady(ready);
+    }
+};
+
+/**
  * This function adds a card to the given row (0, 1, 2 or 3).
  * This function does not check for the validity of this move.
  * @param {number} card The card to add to the given row
@@ -244,6 +281,7 @@ game.prototype.addCardToRow = function (card, row) {
         return false;
     }
     this[`row${row}`].push(card);
+    this.lastChangedCard = card;
     return true;
 };
 
