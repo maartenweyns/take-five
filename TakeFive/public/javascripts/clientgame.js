@@ -187,7 +187,10 @@ function drawOpenCards(data) {
             let container = document.getElementById(`card${i + 1}${j + 1}`);
             container.setAttribute("num", cards[i][j]);
             if (cards[i][j] === lastChanged) {
-                container.style.animation = 'popcard 500ms ease';
+                container.classList.add('popcard');
+                setTimeout(() => {
+                    container.classList.remove('popcard');
+                }, 500)
             }
             container.style.backgroundImage = `url(../images/cards/png/${cards[i][j]}.png)`;
             container.onclick = function () {chooseRow(i)};
