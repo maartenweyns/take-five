@@ -2,7 +2,7 @@ const player = function (name, playerid, socketid) {
     this.name = name;
     this.id = playerid;
     this.socketid = socketid;
-    this.score = 10;
+    this.score = 66;
     this.cards = [];
     this.online = true;
     this.alive = true;
@@ -77,7 +77,7 @@ player.prototype.decrementScore = function (amount) {
     this.score -= amount;
     if (this.score <= 0) {
         this.alive = false;
-        
+
     }
 };
 
