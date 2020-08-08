@@ -86,6 +86,7 @@ game.prototype.player = function(playerID) {
  * This function will increment the round by 1
  */
 game.prototype.nextRound = function() {
+    this.selectedCards = [];
     this.availableCards = shuffleArray([...Utils.allCards]);
     this.calculateNewScores();
     this.givePlayersCards();
