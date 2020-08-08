@@ -10,8 +10,7 @@ const game = function (gameid) {
     // Make it the first card of this round
     this.cardInRound = 1;
 
-    // Put all cards as available
-    this.availableCards = Utils.allCards;
+    this.availableCards = shuffleArray(Utils.allCards);
     // Set the state to "lobby"
     this.state = "lobby";
     // The game board
@@ -87,7 +86,7 @@ game.prototype.player = function(playerID) {
  * This function will increment the round by 1
  */
 game.prototype.nextRound = function() {
-    this.availableCards = Utils.allCards;
+    this.availableCards = shuffleArray(Utils.allCards);
     this.calculateNewScores();
     this.givePlayersCards();
     this.initiateRows();
@@ -166,13 +165,7 @@ game.prototype.addPlayer = function (name, sid) {
 };
 
 game.prototype.takeAvailableCard = function () {
-    let card = Utils.randomFromInterval(1, 104);
-    if (this.availableCards.includes(card)) {
-        this.removeCardFromAvailable(card);
-        return card;
-    } else {
-        return this.takeAvailableCard();
-    }
+    return this.availableCards.pop();
 };
 
 game.prototype.removeCardFromAvailable = function (card) {
@@ -350,6 +343,29 @@ function compareNumReverse(a, b) {
         return -1;
     }
     return 0;
+}
+
+/**
+ * This function will shuffle an array
+ * @param {array} array The array to shuffle
+ */
+function shuffleArray(array) {
+    var m = array.length,
+        t,
+        i;
+
+    // While there remain elements to shuffle…
+    while (m) {
+        // Pick a remaining element…
+        i = Math.floor(Math.random() * m--);
+
+        // And swap it with the current element.
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+
+    return array;
 }
 
 module.exports = game;

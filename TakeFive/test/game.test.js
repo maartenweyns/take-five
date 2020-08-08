@@ -12,6 +12,15 @@ describe('General Functionality Tests', () => {
         expect(game.getID()).toEqual(id);
     });
 
+    test('Get Available Card Test', () => {
+        let array = game.availableCards;
+        expect(array.length).toEqual(105);
+
+        let card = array.pop();
+        expect(card).toBeGreaterThan(0);
+        expect(card).toBeLessThan(105);
+    });
+
     test('Game State not Started Test', () => {
         expect(game.getStatus()).toEqual('lobby');
     });
@@ -98,14 +107,14 @@ describe('Game Started Test', () => {
         expect(game.getStatus()).toEqual('ongoing');
     });
 
-    test('Get minimum of first cards test', () => {
-        let returned = game.getSmallestRowBeginning();
-        let firstCards = [game.row0[0], game.row1[0], game.row2[0], game.row3[0]];
+    // test('Get minimum of first cards test', () => {
+    //     let returned = game.getSmallestRowBeginning();
+    //     let firstCards = [game.row0[0], game.row1[0], game.row2[0], game.row3[0]];
 
-        for(let number of firstCards) {
-            expect(returned <= number).toBeTruthy();
-        }
-    });
+    //     for(let number of firstCards) {
+    //         expect(returned <= number).toBeTruthy();
+    //     }
+    // });
 
     test('Place Card on Row Test', () => {
         // Set the rows of the games to known cards
