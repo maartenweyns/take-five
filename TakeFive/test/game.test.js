@@ -14,11 +14,19 @@ describe('General Functionality Tests', () => {
 
     test('Get Available Card Test', () => {
         let array = game.availableCards;
-        expect(array.length).toEqual(105);
+        expect(array.length).toEqual(104);
 
         let card = array.pop();
+        let card1 = array.pop();
         expect(card).toBeGreaterThan(0);
         expect(card).toBeLessThan(105);
+        expect(card1).toBeGreaterThan(0);
+        expect(card1).toBeLessThan(105);
+
+        game.nextRound();
+
+        let array1 = game.availableCards;
+        expect(array1.length).toEqual(100);
     });
 
     test('Game State not Started Test', () => {

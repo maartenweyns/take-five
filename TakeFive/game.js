@@ -10,7 +10,7 @@ const game = function (gameid) {
     // Make it the first card of this round
     this.cardInRound = 1;
 
-    this.availableCards = shuffleArray(Utils.allCards);
+    this.availableCards = shuffleArray([...Utils.allCards]);
     // Set the state to "lobby"
     this.state = "lobby";
     // The game board
@@ -86,7 +86,7 @@ game.prototype.player = function(playerID) {
  * This function will increment the round by 1
  */
 game.prototype.nextRound = function() {
-    this.availableCards = shuffleArray(Utils.allCards);
+    this.availableCards = shuffleArray([...Utils.allCards]);
     this.calculateNewScores();
     this.givePlayersCards();
     this.initiateRows();
