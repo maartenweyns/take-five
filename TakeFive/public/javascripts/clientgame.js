@@ -4,6 +4,8 @@ var playerid = Number(localStorage.getItem("playerID"));
 
 socket = io(location.host);
 
+M.AutoInit();
+
 (function setup() {
     socket.emit("ingame-join", { gid: gameid, pid: playerid });
 
@@ -36,8 +38,11 @@ socket = io(location.host);
     });
 
     socket.on("end-round-score", (data) => {
-        M.toast({ html: "Scoring!" });
         showNewScores(data)
+    });
+
+    socket.on("dead", () => {
+        document.getElementById('modal-dead-trigger').click();
     });
 
     socket.on("disconnect", () => {
@@ -80,11 +85,6 @@ function showUsers(users) {
     let bigcontainer = document.getElementById('usersleft');
     bigcontainer.innerHTML = '';
 
-    // let allUserContainers = document.getElementsByClassName("userslot");
-    // for (let container of allUserContainers) {
-    //     container.innerHTML = "";
-    // }
-
     // Create empty user containers
     for (let i = 0; i < 10; i++) {
         let container = document.createElement('div');
@@ -97,13 +97,12 @@ function showUsers(users) {
     // Fill in the new data
     let count = 0;
     for (let user of users) {
-        console.log(`Showing user ${user.name} with penalty: ${user.penalty}`);
-
         let container = document.getElementById(`user${count++}`);
 
         let score = document.createElement("p");
         score.innerText = user.score;
         score.classList.add("score");
+        score.id = `score${count - 1}`
         if(user.penalty) {
             score.style.color = 'red';
         }
@@ -113,6 +112,18 @@ function showUsers(users) {
         name.classList.add("name");
 
         container.append(score, name);
+    }
+}
+
+/**
+ * This function will show scores from a given scoring array
+ * @param {array} data The scores array to show
+ */
+function showNewScores(data) {
+    for (let score of data) {
+        let scoreElement = document.getElementById(`score${score.pid}`);
+        decrementScore(scoreElement, score.score);
+        scoreElement.style.color = 'black';
     }
 }
 
@@ -140,7 +151,7 @@ function selectCard(cardID) {
         let container = document.getElementById(cardID);
         let confirm = document.createElement("a");
         confirm.id = "confirmbutton";
-        confirm.classList.add("waves-effect", "waves-light", "btn-floating", "blue");
+        confirm.classList.add("waves-effect", "waves-light", "btn-floating", "blue", "pulse");
         confirm.innerHTML = '<i class="material-icons left">check</i>';
         confirm.onclick = function () {
             confirmSelection();
@@ -164,6 +175,7 @@ function confirmSelection() {
  * @param {array} data The received data of the cards to draw
  */
 function drawOpenCards(data) {
+    console.log('Last changed card is: ' + data.last);
     let cardslots = document.getElementsByClassName('cardslot');
     for (let cardslot of cardslots) {
         cardslot.style.backgroundImage = '';
@@ -184,7 +196,6 @@ function drawOpenCards(data) {
 }
 
 function chooseRow(row) {
-    console.log(`Choosing row ${row}`);
     if (0 <= row <= 4) {
         socket.emit("confirm-row-choice", {pid: playerid, row: row});
     }

@@ -176,6 +176,18 @@ function allPlayersChose(game) {
         setTimeout(function () {
             // Send the player information
             io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
+            // Go to the next round if necessary.
+            if (game.getCardInRound() >= 10) {
+                game.nextRound();
+                io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
+                io.in(game.getID()).emit("end-round-score", game.getScores());
+                let dead = game.getDeadPlayers();
+                for (let player of dead) {
+                    io.to(player.getSocketID()).emit("dead");
+                }
+            } else {
+                game.nextCard();
+            }
             // Set all players to not ready
             game.setAllPlayersReady(false);
             // Send the cards to each player
@@ -219,6 +231,10 @@ function sendPlayerCard(room, selection, row) {
         name: selection.name,
         row: row
     });
+}
+
+function startNewRound(game) {
+
 }
 
 console.info("Starting serever on port " + process.argv[2]);

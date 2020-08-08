@@ -7,6 +7,9 @@ const game = function (gameid) {
 
     // Make it the first round
     this.round = 1;
+    // Make it the first card of this round
+    this.cardInRound = 1;
+
     // Put all cards as available
     this.availableCards = Utils.allCards;
     // Set the state to "lobby"
@@ -41,6 +44,20 @@ game.prototype.getPlayers = function () {
 };
 
 /**
+ * This function will increase the currect card of the current round by one.
+ */
+game.prototype.nextCard = function () {
+    this.cardInRound++;
+};
+
+/**
+ * This function returns the current card from this round.
+ */
+game.prototype.getCardInRound = function () {
+    return this.cardInRound;
+};
+
+/**
  * This function will construct and return a 2D array of all the open cards.
  * @returns {array} An array which has the rows of cards as its elements
  */
@@ -66,6 +83,18 @@ game.prototype.player = function(playerID) {
     return this.players[playerID];
 };
 
+/**
+ * This function will increment the round by 1
+ */
+game.prototype.nextRound = function() {
+    this.availableCards = Utils.allCards;
+    this.calculateNewScores();
+    this.givePlayersCards();
+    this.initiateRows();
+    this.round += 1;
+    this.cardInRound = 1;
+};
+
 game.prototype.getPlayerInformation = function () {
     let returnvalue = [];
     for (let player of this.players) {
@@ -88,7 +117,15 @@ game.prototype.startGame = function () {
     // Give all players cards
     this.givePlayersCards();
     // Get starting cards
+    this.initiateRows();
+};
+
+/**
+ * This function will put one available card on each row.
+ */
+game.prototype.initiateRows = function () {
     for(let i = 0; i < 4; i++) {
+        this[`row${i}`] = [];
         this[`row${i}`].push(this.takeAvailableCard());
     }
 };
@@ -101,11 +138,21 @@ game.prototype.setPlayerReady = function (pid, ready) {
 
 game.prototype.allPlayersReady = function () {
     for (let player of this.players) {
-        if (!player.isReady()) {
+        if (player.online && player.alive && !player.isReady()) {
             return false;
         }
     }
     return true;
+};
+
+game.prototype.getDeadPlayers = function () {
+    let array = [];
+    for (let player of this.players) {
+        if (!player.alive) {
+            array.push(player);
+        }
+    }
+    return array;
 };
 
 game.prototype.addPlayer = function (name, sid) {
@@ -137,9 +184,12 @@ game.prototype.removeCardFromAvailable = function (card) {
     return false;
 };
 
+/**
+ * This function will give all online and alive players 10 cards.
+ */
 game.prototype.givePlayersCards = function () {
     for (let player of this.players) {
-        if (player.online) {
+        if (player.online && player.alive) {
             let cards = [];
             for (let i = 0; i < 10; i++) {
                 let card = this.takeAvailableCard();
@@ -153,7 +203,7 @@ game.prototype.givePlayersCards = function () {
 game.prototype.getScores = function () {
     let array = [];
     for (let player of this.players) {
-        array.push({pid: player.getID(), score: player.getScore(), penalty: player.getScoreChanging()});
+        array.push({pid: player.getID(), score: player.getScore()});
     }
     return array;
 };
@@ -220,15 +270,22 @@ game.prototype.placeCardOnRow = function (card, pid) {
  */
 game.prototype.playerTookRow = function (pid, row, card) {
     if (0 <= row < 4) {
-        // Add the cards of that row back to the available playing cards
-        for (let card of this[`row${row}`]) {
-            this.availableCards.push(card);
-        }
         // Add cards from the row to the players penaly cards
         this.player(pid).addPenaltyCards(this[`row${row}`]);
         // Set the row as the new card
         this[`row${row}`] = [card];
         this.lastChangedCard = card;
+    }
+};
+
+/**
+ * This function will update the scores of all players and reset their penalty cards
+ */
+game.prototype.calculateNewScores = function () {
+    for (let player of this.players) {
+        let penalty = this.calculatePenalty(player.getPenaltyCards());
+        player.decrementScore(penalty);
+        player.resetPenaltyCards();
     }
 };
 
