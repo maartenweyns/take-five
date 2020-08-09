@@ -29,6 +29,10 @@ M.AutoInit();
         hideCards(card);
     });
 
+    socket.on('player-ready', (pid) => {
+        markPlayerReady(pid);
+    });
+
     socket.on("finish-round", () => {
         hidePlayers();
     });
@@ -111,8 +115,19 @@ function showUsers(users) {
         name.innerText = user.name;
         name.classList.add("name");
 
-        container.append(score, name);
+        let thinking = document.createElement('div');
+        thinking.classList.add('progress');
+        let pbar = document.createElement('div');
+        pbar.classList.add('indeterminate', 'blue');
+        thinking.append(pbar);
+
+        container.append(score, name, thinking);
     }
+}
+
+function markPlayerReady(pid) {
+    let container = document.getElementById(`user${pid}`);
+    container.classList.add('user-done');
 }
 
 /**

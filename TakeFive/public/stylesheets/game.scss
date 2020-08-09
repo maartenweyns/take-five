@@ -6,6 +6,9 @@ $primary-color-dark: false !default;
 $material-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12),
 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 
+$done-shadow: 0 2px 2px 0 rgba(0, 255, 0, 0.28), 0 3px 1px -2px rgba(0, 255, 0, 0.24),
+0 1px 5px 0 rgba(0, 255, 0, 0.4);
+
 body {
     width: 100vw;
     height: 100vh;
@@ -91,6 +94,7 @@ body {
         border-radius: 5px;
         padding: 0 10px;
         margin-bottom: 10px;
+        position: relative;
         p {
             margin: 0;
             user-select: none;
@@ -105,6 +109,21 @@ body {
         .cardname {
             font-family: "Russo One", sans-serif;
             font-size: 1.5vw;
+        }
+        .progress {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 0;
+            border-radius: 5px;
+            background-color: #b3e5fc;
+        }
+    }
+    .user-done {
+        animation: userdone 250ms ease;
+        border-bottom: solid 4px #00c853;
+        .progress {
+            display: none;
         }
     }
     .cardimage {
@@ -193,9 +212,20 @@ body {
         transform: scale(1);
     }
     75% {
-        transform: scale(1.2);
+        transform: scale(1.1);
     }
     100% {
         transform: scale(1);
+    }
+}
+
+@keyframes userdone {
+    50% {
+        transform: scale(1.2);
+        box-shadow: $done-shadow;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: $material-shadow;
     }
 }
