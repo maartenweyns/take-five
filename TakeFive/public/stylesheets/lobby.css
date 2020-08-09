@@ -35,11 +35,12 @@ body {
       -ms-flex-align: center;
           align-items: center;
   padding: 10px;
-  gap: 10px;
+  padding-bottom: 0px;
 }
 
 .welcomebox a {
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .welcomebox span {

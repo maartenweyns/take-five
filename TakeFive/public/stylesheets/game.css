@@ -17,82 +17,6 @@ body {
           justify-content: space-evenly;
 }
 
-body .owncards {
-  width: 80vw;
-  height: calc((1 / 6) * 100vh);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
-
-body .owncards .ownCard {
-  -webkit-transition: 100ms;
-  transition: 100ms;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  height: 100%;
-  background-color: white;
-  margin-left: -20px;
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-  border-radius: 5px;
-  -webkit-transform: translateY(20px);
-          transform: translateY(20px);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-body .owncards .ownCard .cardImage {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  max-width: 100%;
-  max-height: 100%;
-}
-
-body .owncards .ownCard:hover {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-  z-index: 99;
-}
-
-body .owncards .selected {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-  z-index: 98;
-  -webkit-box-shadow: 0px 0px 10px 0px #00a400;
-          box-shadow: 0px 0px 10px 0px #00a400;
-}
-
-body .owncards .btn-floating {
-  position: absolute;
-  top: -10%;
-  right: -10%;
-}
-
 .users {
   width: calc(20vw - 40px);
   height: calc(100vh - 40px);
@@ -161,6 +85,14 @@ body .owncards .btn-floating {
   background-color: #b3e5fc;
 }
 
+.users .user-card-slot {
+  margin-top: 5px;
+  height: 20%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
 .users .user-done {
   -webkit-animation: userdone 250ms ease;
           animation: userdone 250ms ease;
@@ -177,6 +109,10 @@ body .owncards .btn-floating {
   border-radius: 5px;
   background-color: white;
   max-width: 100%;
+  -ms-flex-item-align: end;
+      -ms-grid-row-align: end;
+      align-self: end;
+  margin-bottom: 5px;
 }
 
 .playarea {
@@ -223,6 +159,94 @@ body .owncards .btn-floating {
 .playarea .board .popcard {
   -webkit-animation: popcard 500ms ease;
           animation: popcard 500ms ease;
+}
+
+.playarea .owncards {
+  width: 80vw;
+  height: calc((1 / 6) * 100vh);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.playarea .owncards .ownCard {
+  -webkit-transition: 100ms;
+  transition: 100ms;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  height: 100%;
+  background-color: white;
+  margin-left: -20px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  -webkit-transform: translateY(20px);
+          transform: translateY(20px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.playarea .owncards .ownCard .cardImage {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.playarea .owncards .ownCard:hover {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  z-index: 99;
+}
+
+.playarea .owncards .selected {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  z-index: 98;
+  -webkit-box-shadow: 0px 0px 10px 0px #00a400;
+          box-shadow: 0px 0px 10px 0px #00a400;
+}
+
+.playarea .owncards .btn-floating {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+}
+
+@media only screen and (max-width: 800px) {
+  .users {
+    display: none;
+  }
+  .playarea {
+    width: 100vw;
+  }
+  .playarea .owncards {
+    width: 100vw;
+  }
 }
 
 /* ----------------------------------------------

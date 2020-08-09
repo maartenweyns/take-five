@@ -269,7 +269,7 @@ function showEndCard(data) {
     container.innerHTML = "";
 
     let userslot = document.createElement("div");
-    userslot.classList.add("userslot");
+    userslot.classList.add("userslot", "user-card-slot");
     let username = document.createElement("p");
     username.innerText = data.name;
     username.classList.add("cardname");
