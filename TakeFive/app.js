@@ -233,10 +233,6 @@ function sendPlayerCard(room, selection, row) {
     });
 }
 
-function startNewRound(game) {
-
-}
-
 console.info("Starting serever on port " + process.argv[2]);
 server.listen(process.argv[2]);
 console.info("[SERVERSTART] Server started!");
