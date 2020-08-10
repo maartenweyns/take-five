@@ -115,6 +115,8 @@ function showUsers(users) {
         name.innerText = user.name;
         name.classList.add("name");
 
+        container.append(score, name);
+
         if (user.alive) {
             let thinking = document.createElement('div');
             thinking.classList.add('progress');
@@ -122,7 +124,7 @@ function showUsers(users) {
             pbar.classList.add('indeterminate', 'blue');
             thinking.append(pbar);
 
-            container.append(score, name, thinking);
+            container.append(thinking);
         } else {
             container.classList.add('user-dead');
         }
