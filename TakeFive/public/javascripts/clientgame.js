@@ -115,13 +115,17 @@ function showUsers(users) {
         name.innerText = user.name;
         name.classList.add("name");
 
-        let thinking = document.createElement('div');
-        thinking.classList.add('progress');
-        let pbar = document.createElement('div');
-        pbar.classList.add('indeterminate', 'blue');
-        thinking.append(pbar);
+        if (user.alive) {
+            let thinking = document.createElement('div');
+            thinking.classList.add('progress');
+            let pbar = document.createElement('div');
+            pbar.classList.add('indeterminate', 'blue');
+            thinking.append(pbar);
 
-        container.append(score, name, thinking);
+            container.append(score, name, thinking);
+        } else {
+            container.classList.add('user-dead');
+        }
     }
 }
 
