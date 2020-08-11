@@ -174,8 +174,6 @@ io.on("connection", (socket) => {
  */
 function allPlayersChose(game) {
     if (game.getSelectedCards().length === 0) {
-        // Send the player information
-        io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
         // Go to the next round if necessary.
         if (game.getCardInRound() >= 10) {
             game.nextRound();
@@ -188,6 +186,8 @@ function allPlayersChose(game) {
         } else {
             game.nextCard();
         }
+        // Send the player information
+        io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
         // Set all players to not ready
         game.setAllPlayersReady(false);
         // Send the cards to each player
