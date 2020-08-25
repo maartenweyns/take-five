@@ -98,7 +98,7 @@ game.prototype.nextRound = function() {
 game.prototype.getPlayerInformation = function () {
     let returnvalue = [];
     for (let player of this.players) {
-        returnvalue.push({name: player.getName(), score: player.getScore(), penalty: player.getScoreChanging()});
+        returnvalue.push({name: player.getName(), score: player.getScore(), penalty: player.getScoreChanging(), alive: player.alive});
     }
     return returnvalue;
 };
@@ -204,7 +204,9 @@ game.prototype.getScores = function () {
 
 game.prototype.finishRound = function () {
     for (let player of this.players) {
-        this.selectedCards.push({pid: player.getID(), name: player.getName(), num: player.getSelectedCard()});
+        if (player.alive) {
+            this.selectedCards.push({pid: player.getID(), name: player.getName(), num: player.getSelectedCard()});  
+        }
     }
     this.selectedCards.sort(compareNumReverse);
 };

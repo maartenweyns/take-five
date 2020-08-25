@@ -6,6 +6,9 @@ $primary-color-dark: false !default;
 $material-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12),
 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 
+$done-shadow: 0 2px 2px 0 rgba(0, 255, 0, 0.28), 0 3px 1px -2px rgba(0, 255, 0, 0.24),
+0 1px 5px 0 rgba(0, 255, 0, 0.4);
+
 body {
     width: 100vw;
     height: 100vh;
@@ -19,6 +22,118 @@ body {
     flex-direction: row;
     justify-content: space-evenly;
     // align-items: center;
+}
+
+.users {
+    width: calc(20vw - 40px);
+    height: calc(100vh - 40px);
+    margin: 20px;
+    padding: 10px;
+
+    display: grid;
+    grid-template-columns: 100%;
+    grid-auto-rows: 1fr;
+
+    .userslot {
+        transition: 100ms;
+        box-shadow: $material-shadow;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #eeeeee;
+        border-radius: 5px;
+        padding: 0 10px;
+        margin-bottom: 10px;
+        position: relative;
+        p {
+            margin: 0;
+            user-select: none;
+        }
+        .score, .cardname {
+            font-family: "Russo One", sans-serif;
+            font-size: 4.5vh;
+        }
+        .name {
+            font-size: 1.5vw;
+        }
+        .cardname {
+            font-family: "Russo One", sans-serif;
+            font-size: 1.5vw;
+        }
+        .progress {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 0;
+            border-radius: 5px;
+            background-color: #b3e5fc;
+        }
+    }
+    .user-card-slot {
+        margin-top: 5px;
+        height: 20%;
+        justify-content: center;
+    }
+    .user-done {
+        animation: userdone 250ms ease;
+        border-bottom: solid 4px #00c853;
+        .progress {
+            display: none;
+        }
+    }
+    .user-dead {
+        border-bottom: solid 4px #f44336;
+        .progress {
+            display: none;
+        }
+    }
+    .cardimage {
+        box-shadow: $material-shadow;
+        border-radius: 5px;
+        background-color: white;
+        max-width: 100%;
+        align-self: end;
+        margin-bottom: 5px;
+    }
+}
+
+.playarea {
+    box-sizing: border-box;
+    width: 80vw;
+    .board {
+        width: calc(100% - 40px);
+        height: calc(((5 / 6) * 100vh) - 40px);
+        margin: 20px;
+
+        // Setup CSS Grid
+        display: grid;
+        grid-template-columns: auto auto auto auto auto;
+        grid-template-rows: auto auto auto auto;
+        justify-content: space-evenly;
+
+        .cardslot {
+            transition: 100ms;
+            box-shadow: $material-shadow;
+            background-color: #eeeeee;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 10px;
+            border-radius: 5px;
+            width: calc(0.706650831 * ((1 / 6) * 100vh));
+            height: calc((1 / 6) * 100vh);
+        }
+
+        .cardslot:hover {
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24),
+                0 1px 5px 0 rgba(0, 0, 0, 0.4);
+            background-color: #eeeeee;
+        }
+
+        .popcard {
+            animation: popcard 500ms ease;
+        }
+    }
 
     .owncards {
         width: 80vw;
@@ -70,88 +185,17 @@ body {
     }
 }
 
-.users {
-    width: calc(20vw - 40px);
-    height: calc(100vh - 40px);
-    margin: 20px;
-    padding: 10px;
-
-    display: grid;
-    grid-template-columns: 100%;
-    grid-auto-rows: 1fr;
-
-    .userslot {
-        transition: 100ms;
-        box-shadow: $material-shadow;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #eeeeee;
-        border-radius: 5px;
-        padding: 0 10px;
-        margin-bottom: 10px;
-        p {
-            margin: 0;
-            user-select: none;
-        }
-        .score, .cardname {
-            font-family: "Russo One", sans-serif;
-            font-size: 3vw;
-        }
-        .name {
-            font-size: 1.5vw;
-        }
-        .cardname {
-            font-family: "Russo One", sans-serif;
-            font-size: 1.5vw;
+@media only screen and (max-width: 800px) {
+    .users {
+        display: none;
+    }
+    .playarea {
+        width: 100vw;
+        .owncards {
+            width: 100vw;
         }
     }
-    .cardimage {
-        box-shadow: $material-shadow;
-        border-radius: 5px;
-        background-color: white;
-        max-width: 100%;
-    }
-}
-
-.playarea {
-    box-sizing: border-box;
-    width: 80vw;
-    .board {
-        width: calc(100% - 40px);
-        height: calc(((5 / 6) * 100vh) - 40px);
-        margin: 20px;
-
-        // Setup CSS Grid
-        display: grid;
-        grid-template-columns: auto auto auto auto auto;
-        grid-template-rows: auto auto auto auto;
-        justify-content: space-evenly;
-
-        .cardslot {
-            transition: 100ms;
-            box-shadow: $material-shadow;
-            background-color: #eeeeee;
-            background-size: cover;
-            background-repeat: no-repeat;
-            margin: 10px;
-            border-radius: 5px;
-            width: calc(0.706650831 * ((1 / 6) * 100vh));
-            height: calc((1 / 6) * 100vh);
-        }
-
-        .cardslot:hover {
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24),
-                0 1px 5px 0 rgba(0, 0, 0, 0.4);
-            background-color: #eeeeee;
-        }
-
-        .popcard {
-            animation: popcard 500ms ease;
-        }
-    }
-}
+  }
 
 /* ----------------------------------------------
  * Generated by Animista on 2020-7-31 14:27:19
@@ -193,9 +237,20 @@ body {
         transform: scale(1);
     }
     75% {
-        transform: scale(1.2);
+        transform: scale(1.1);
     }
     100% {
         transform: scale(1);
+    }
+}
+
+@keyframes userdone {
+    50% {
+        transform: scale(1.2);
+        box-shadow: $done-shadow;
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: $material-shadow;
     }
 }

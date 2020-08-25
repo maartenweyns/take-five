@@ -17,82 +17,6 @@ body {
           justify-content: space-evenly;
 }
 
-body .owncards {
-  width: 80vw;
-  height: calc((1 / 6) * 100vh);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
-
-body .owncards .ownCard {
-  -webkit-transition: 100ms;
-  transition: 100ms;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  height: 100%;
-  background-color: white;
-  margin-left: -20px;
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-  border-radius: 5px;
-  -webkit-transform: translateY(20px);
-          transform: translateY(20px);
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-body .owncards .ownCard .cardImage {
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  max-width: 100%;
-  max-height: 100%;
-}
-
-body .owncards .ownCard:hover {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-  z-index: 99;
-}
-
-body .owncards .selected {
-  -webkit-transform: translateY(0);
-          transform: translateY(0);
-  z-index: 98;
-  -webkit-box-shadow: 0px 0px 10px 0px #00a400;
-          box-shadow: 0px 0px 10px 0px #00a400;
-}
-
-body .owncards .btn-floating {
-  position: absolute;
-  top: -10%;
-  right: -10%;
-}
-
 .users {
   width: calc(20vw - 40px);
   height: calc(100vh - 40px);
@@ -127,6 +51,7 @@ body .owncards .btn-floating {
   border-radius: 5px;
   padding: 0 10px;
   margin-bottom: 10px;
+  position: relative;
 }
 
 .users .userslot p {
@@ -139,7 +64,7 @@ body .owncards .btn-floating {
 
 .users .userslot .score, .users .userslot .cardname {
   font-family: "Russo One", sans-serif;
-  font-size: 3vw;
+  font-size: 4.5vh;
 }
 
 .users .userslot .name {
@@ -151,12 +76,51 @@ body .owncards .btn-floating {
   font-size: 1.5vw;
 }
 
+.users .userslot .progress {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 0;
+  border-radius: 5px;
+  background-color: #b3e5fc;
+}
+
+.users .user-card-slot {
+  margin-top: 5px;
+  height: 20%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.users .user-done {
+  -webkit-animation: userdone 250ms ease;
+          animation: userdone 250ms ease;
+  border-bottom: solid 4px #00c853;
+}
+
+.users .user-done .progress {
+  display: none;
+}
+
+.users .user-dead {
+  border-bottom: solid 4px #f44336;
+}
+
+.users .user-dead .progress {
+  display: none;
+}
+
 .users .cardimage {
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   background-color: white;
   max-width: 100%;
+  -ms-flex-item-align: end;
+      -ms-grid-row-align: end;
+      align-self: end;
+  margin-bottom: 5px;
 }
 
 .playarea {
@@ -203,6 +167,94 @@ body .owncards .btn-floating {
 .playarea .board .popcard {
   -webkit-animation: popcard 500ms ease;
           animation: popcard 500ms ease;
+}
+
+.playarea .owncards {
+  width: 80vw;
+  height: calc((1 / 6) * 100vh);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.playarea .owncards .ownCard {
+  -webkit-transition: 100ms;
+  transition: 100ms;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  height: 100%;
+  background-color: white;
+  margin-left: -20px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 5px;
+  -webkit-transform: translateY(20px);
+          transform: translateY(20px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.playarea .owncards .ownCard .cardImage {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.playarea .owncards .ownCard:hover {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  z-index: 99;
+}
+
+.playarea .owncards .selected {
+  -webkit-transform: translateY(0);
+          transform: translateY(0);
+  z-index: 98;
+  -webkit-box-shadow: 0px 0px 10px 0px #00a400;
+          box-shadow: 0px 0px 10px 0px #00a400;
+}
+
+.playarea .owncards .btn-floating {
+  position: absolute;
+  top: -10%;
+  right: -10%;
+}
+
+@media only screen and (max-width: 800px) {
+  .users {
+    display: none;
+  }
+  .playarea {
+    width: 100vw;
+  }
+  .playarea .owncards {
+    width: 100vw;
+  }
 }
 
 /* ----------------------------------------------
@@ -261,8 +313,8 @@ body .owncards .btn-floating {
             transform: scale(1);
   }
   75% {
-    -webkit-transform: scale(1.2);
-            transform: scale(1.2);
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
   }
   100% {
     -webkit-transform: scale(1);
@@ -284,12 +336,42 @@ body .owncards .btn-floating {
             transform: scale(1);
   }
   75% {
-    -webkit-transform: scale(1.2);
-            transform: scale(1.2);
+    -webkit-transform: scale(1.1);
+            transform: scale(1.1);
   }
   100% {
     -webkit-transform: scale(1);
             transform: scale(1);
+  }
+}
+
+@-webkit-keyframes userdone {
+  50% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 255, 0, 0.28), 0 3px 1px -2px rgba(0, 255, 0, 0.24), 0 1px 5px 0 rgba(0, 255, 0, 0.4);
+            box-shadow: 0 2px 2px 0 rgba(0, 255, 0, 0.28), 0 3px 1px -2px rgba(0, 255, 0, 0.24), 0 1px 5px 0 rgba(0, 255, 0, 0.4);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+@keyframes userdone {
+  50% {
+    -webkit-transform: scale(1.2);
+            transform: scale(1.2);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 255, 0, 0.28), 0 3px 1px -2px rgba(0, 255, 0, 0.24), 0 1px 5px 0 rgba(0, 255, 0, 0.4);
+            box-shadow: 0 2px 2px 0 rgba(0, 255, 0, 0.28), 0 3px 1px -2px rgba(0, 255, 0, 0.24), 0 1px 5px 0 rgba(0, 255, 0, 0.4);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   }
 }
 /*# sourceMappingURL=game.css.map */

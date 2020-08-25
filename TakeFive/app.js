@@ -131,6 +131,7 @@ io.on("connection", (socket) => {
 
         game.player(pid).setSelectedCard(card);
         socket.emit("ready-self", card);
+        io.in(game.getID()).emit('player-ready', pid);
 
         if (game.allPlayersReady()) {
             game.finishRound();
@@ -173,29 +174,27 @@ io.on("connection", (socket) => {
  */
 function allPlayersChose(game) {
     if (game.getSelectedCards().length === 0) {
-        setTimeout(function () {
-            // Send the player information
-            io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
-            // Go to the next round if necessary.
-            if (game.getCardInRound() >= 10) {
-                game.nextRound();
-                io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
-                io.in(game.getID()).emit("end-round-score", game.getScores());
-                let dead = game.getDeadPlayers();
-                for (let player of dead) {
-                    io.to(player.getSocketID()).emit("dead");
-                }
-            } else {
-                game.nextCard();
+        // Go to the next round if necessary.
+        if (game.getCardInRound() >= 10) {
+            game.nextRound();
+            io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
+            io.in(game.getID()).emit("end-round-score", game.getScores());
+            let dead = game.getDeadPlayers();
+            for (let player of dead) {
+                io.to(player.getSocketID()).emit("dead");
             }
-            // Set all players to not ready
-            game.setAllPlayersReady(false);
-            // Send the cards to each player
-            let players = game.getPlayers();
-            for (let player of players) {
-                io.to(player.getSocketID()).emit("own-cards", game.player(player.getID()).getCards());
-            }
-        }, 1000);
+        } else {
+            game.nextCard();
+        }
+        // Send the player information
+        io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
+        // Set all players to not ready
+        game.setAllPlayersReady(false);
+        // Send the cards to each player
+        let players = game.getPlayers();
+        for (let player of players) {
+            io.to(player.getSocketID()).emit("own-cards", game.player(player.getID()).getCards());
+        }
         return;
     }
     let selection = game.selectedCards.pop();

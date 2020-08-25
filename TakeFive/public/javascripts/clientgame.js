@@ -29,6 +29,10 @@ M.AutoInit();
         hideCards(card);
     });
 
+    socket.on('player-ready', (pid) => {
+        markPlayerReady(pid);
+    });
+
     socket.on("finish-round", () => {
         hidePlayers();
     });
@@ -112,7 +116,24 @@ function showUsers(users) {
         name.classList.add("name");
 
         container.append(score, name);
+
+        if (user.alive) {
+            let thinking = document.createElement('div');
+            thinking.classList.add('progress');
+            let pbar = document.createElement('div');
+            pbar.classList.add('indeterminate', 'blue');
+            thinking.append(pbar);
+
+            container.append(thinking);
+        } else {
+            container.classList.add('user-dead');
+        }
     }
+}
+
+function markPlayerReady(pid) {
+    let container = document.getElementById(`user${pid}`);
+    container.classList.add('user-done');
 }
 
 /**
@@ -254,7 +275,7 @@ function showEndCard(data) {
     container.innerHTML = "";
 
     let userslot = document.createElement("div");
-    userslot.classList.add("userslot");
+    userslot.classList.add("userslot", "user-card-slot");
     let username = document.createElement("p");
     username.innerText = data.name;
     username.classList.add("cardname");
