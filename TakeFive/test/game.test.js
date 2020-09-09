@@ -157,3 +157,81 @@ describe('Game Started Test', () => {
         expect(game.row3).toEqual([85, 23]);
     });
 });
+
+describe("Winning Player Determination Tests", () => {
+    beforeEach(() => {
+        game = new Game('someID');
+        game.addPlayer('Timmy');
+        game.addPlayer('Sarah');
+        game.addPlayer('Lucas');
+        game.startGame();
+    });
+
+    test('One player alive, two other players died sequentially', () => {
+        // Set the score of Sarah to -2
+        game.player(1).decrementScore(68);
+
+        let dead1 = game.getDeadPlayers();
+        expect(dead1).toEqual([game.player(1)]);
+
+        // Set the score of Lucas to -1
+        game.player(2).decrementScore(68);
+
+        let dead2 = game.getDeadPlayers();
+        // We expect the player who died last to be in the last array position
+        expect(dead2).toEqual([game.player(1), game.player(2)]);
+
+        let winner = game.getWinningPlayer();
+        // The output should still be an array
+        expect(winner).toEqual([game.player(0)]);
+    });
+
+    test('No player alive, all players died sequentially, one winner', () => {
+       // Set the score of Sarah to -2
+       game.player(1).decrementScore(68);
+
+       let dead1 = game.getDeadPlayers();
+       expect(dead1).toEqual([game.player(1)]);
+
+       // Set the score of Lucas to -1
+       game.player(2).decrementScore(68);
+
+       let dead2 = game.getDeadPlayers();
+       // We expect the player who died last to be in the last array position
+       expect(dead2).toEqual([game.player(1), game.player(2)]);
+
+       // Set the score of Timmy to 0
+       game.player(0).decrementScore(66);
+
+       let dead3 = game.getDeadPlayers();
+       // We expect the player who died last to be in the last array position
+       expect(dead3).toEqual([game.player(1), game.player(2), game.player(0)]);
+
+       let winner = game.getWinningPlayer();
+       expect(winner).toEqual([game.player(0)]);
+    });
+
+    test('No player alive, two winners', () => {
+        // Set the score of Sarah to -2
+        game.player(1).decrementScore(68);
+ 
+        let dead1 = game.getDeadPlayers();
+        expect(dead1).toEqual([game.player(1)]);
+        // Check if the number of alive players decreased
+        expect(game.getPlayersAlive()).toBe(2);
+ 
+        // Set the score of Lucas to -2
+        game.player(2).decrementScore(68);
+        // Set the score of Timmy to -2
+        game.player(0).decrementScore(68);
+ 
+        let dead3 = game.getDeadPlayers();
+        // We expect the player who died last to be in the last array position
+        expect(dead3).toEqual([game.player(1), game.player(0), game.player(2)]);
+        // The number of alive players should not have decreased
+        expect(game.getPlayersAlive()).toBe(2);
+ 
+        let winner = game.getWinningPlayer();
+        expect(winner).toEqual([game.player(2), game.player(0)]);
+     });
+});
