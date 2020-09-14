@@ -5,10 +5,23 @@ const game = function (gameid) {
     this.id = gameid;
     this.players = [];
 
+    // ************
+    // ** ROUNDS **
+    // ************
+    //
     // Make it the first round
     this.round = 1;
     // Make it the first card of this round
     this.cardInRound = 1;
+
+    // ***********************
+    // ** WINNING DETECTION **
+    // ***********************
+    //
+    // Save the amount of players that are alive
+    this.playersAlive = -1;
+    // Save the order in which the players died
+    this.diedLast = [];
 
     this.availableCards = shuffleArray([...Utils.allCards]);
     // Set the state to "lobby"
@@ -55,6 +68,22 @@ game.prototype.nextCard = function () {
 game.prototype.getCardInRound = function () {
     return this.cardInRound;
 };
+
+/**
+ * Return the amount of players that are alive
+ * @returns {Number} The amount of alive players
+ */
+game.prototype.getPlayersAlive = function () {
+    return this.playersAlive;
+}
+
+/**
+ * Sets the amount of alive players to the value provided
+ * @param {Number} amount The amount of alive players
+ */
+game.prototype.setPlayersAlive = function (amount) {
+    this.playersAlive = amount;
+}
 
 /**
  * This function will construct and return a 2D array of all the open cards.
@@ -118,6 +147,8 @@ game.prototype.startGame = function () {
     this.givePlayersCards();
     // Get starting cards
     this.initiateRows();
+    // Set the amount of players alive
+    this.setPlayersAlive(this.getPlayers().length);
 };
 
 /**
@@ -146,13 +177,18 @@ game.prototype.allPlayersReady = function () {
 };
 
 game.prototype.getDeadPlayers = function () {
-    let array = [];
     for (let player of this.players) {
         if (!player.alive) {
-            array.push(player);
+            if (!this.diedLast.includes(player)) {
+                this.diedLast.push(player);
+            }
         }
     }
-    return array;
+    // Set the new amount of alive players (all players - dead ones)
+    if (this.diedLast.length < this.getPlayers().length - 1) {
+        this.setPlayersAlive(this.getPlayers().length - this.diedLast.length);
+    }
+    return this.diedLast;
 };
 
 game.prototype.addPlayer = function (name, sid) {
@@ -336,6 +372,48 @@ game.prototype.addCardToRow = function (card, row) {
     this[`row${row}`].push(card);
     this.lastChangedCard = card;
     return true;
+};
+
+/**
+ * This function will determine the winning player of the game, depending on the players that died in the last played round
+ * @returns {Player} The winning player object
+ */
+game.prototype.getWinningPlayer = function () {
+    let dead = this.getDeadPlayers();
+
+    if (dead.length === this.getPlayers().length) {
+        // All Players are Dead
+
+        // Get the last x players that died
+        let diedLast = [];
+        for (let i = 0; i < this.getPlayersAlive(); i++) {
+            diedLast.push(dead.pop());
+        }
+        
+        // Get the player with the highest score
+        let winners = [diedLast[0]];
+        let highestScore = diedLast[0].getScore();
+        for (let player of diedLast) {
+            if (player.getScore() > highestScore) {
+                winners = [player];
+                highestScore = player.getScore();
+            } else if (player.getScore() === highestScore) {
+                if (!winners.includes(player)) {
+                    winners.push(player);
+                }
+            }
+        }
+
+        // Return the winner of the game
+        return winners;
+    } else {
+        // There is one winner
+        for (let player of this.getPlayers()) {
+            if (!dead.includes(player)) {
+                return [player];
+            }
+        }
+    }
 };
 
 function compareNumReverse(a, b) {

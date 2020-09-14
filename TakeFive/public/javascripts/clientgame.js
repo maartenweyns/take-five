@@ -2,6 +2,8 @@
 var gameid = localStorage.getItem("gameID");
 var playerid = Number(localStorage.getItem("playerID"));
 
+var deathPopupShown = false;
+
 socket = io(location.host);
 
 M.AutoInit();
@@ -46,7 +48,10 @@ M.AutoInit();
     });
 
     socket.on("dead", () => {
-        document.getElementById('modal-dead-trigger').click();
+        if (!deathPopupShown) {
+            document.getElementById('modal-dead-trigger').click();
+            deathPopupShown = true;
+        }
     });
 
     socket.on("disconnect", () => {

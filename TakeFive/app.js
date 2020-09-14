@@ -183,6 +183,10 @@ function allPlayersChose(game) {
             for (let player of dead) {
                 io.to(player.getSocketID()).emit("dead");
             }
+            // Check if there is one or less than one player alive
+            if (dead.length >= game.getPlayers().length - 1) {
+                let playerwon = game.getWinningPlayer();
+            }
         } else {
             game.nextCard();
         }
