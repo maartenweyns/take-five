@@ -185,7 +185,10 @@ function allPlayersChose(game) {
             }
             // Check if there is one or less than one player alive
             if (dead.length >= game.getPlayers().length - 1) {
-                let playerwon = game.getWinningPlayer();
+                let playerswon = game.getWinningPlayer();
+                for (let player of playerswon){
+                    io.to(player.getSocketID()).emit('winner');
+                }
             }
         } else {
             game.nextCard();
@@ -213,10 +216,10 @@ function allPlayersChose(game) {
 
         return;
     } else {
-        let row = game.placeCardOnRow(selection.num, selection.pid);
+        game.placeCardOnRow(selection.num, selection.pid);
         sendPlayerCard(io.in(game.getID()), selection);
         setTimeout(function () {
-            io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
+            io.in(game.getID()).emit("open-cards", game.getOpenCards());
             allPlayersChose(game);
         }, 2000);
     }

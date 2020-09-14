@@ -54,6 +54,14 @@ M.AutoInit();
         }
     });
 
+    socket.on("winner", () => {
+        document.getElementById('modal-winner-trigger').click();
+        confetti.start();
+        setTimeout(() => {
+            confetti.stop();
+        }, 2000);
+    });
+
     socket.on("disconnect", () => {
         M.toast({ html: "Disconnected!" });
     });
