@@ -1,0 +1,115 @@
+$primary-color: #6c94cd;
+$link-color: $primary-color;
+$primary-color-light: false !default;
+$primary-color-dark: false !default;
+
+$material-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12),
+0 1px 5px 0 rgba(0, 0, 0, 0.2);
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-image {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    background-image: url(../images/decorations/background.svg);
+    background-size: 20%;
+    background-position-x: -10px;
+    background-position-y: -15px;
+}
+
+.rules-container {
+    position: relative;
+    width: 90vw;
+    max-width: 800px;
+    min-height: 90vh;
+}
+
+.darkbutton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+h1, p, ul {
+    margin: 10px !important;
+}
+
+.examples {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .card {
+        max-width: 200px;
+        margin: 10px;
+    }
+}
+
+.list-decoration {
+    padding-left: 40px !important;
+    li {
+        list-style-type: disc !important;
+    }
+}
+
+.board {
+    // Setup CSS Grid
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    justify-content: space-evenly;
+
+    .cardslot {
+        transition: 100ms;
+        box-shadow: $material-shadow;
+        background-color: #eeeeee;
+        background-size: cover;
+        background-repeat: no-repeat;
+        margin: 10px;
+        border-radius: 5px;
+        font-size: 0;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    }
+
+    .cardslot:hover {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24),
+            0 1px 5px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    .popcard {
+        animation: popcard 500ms ease;
+    }
+}
+
+.dark {
+    body {
+        background-color: #212121;
+    }
+    .bg-image {
+        opacity: 20%;
+    }
+    .card, .modal-content, .modal-footer {
+        background-color: #424242 !important;
+    }
+    h1, p, ul, a {
+        color: white;
+    }
+    .cardslot, .collapsible-header, .collapsible-header:focus {
+        background-color: #616161;
+    }
+}
