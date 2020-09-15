@@ -1,6 +1,6 @@
 {
   "name": "takefive",
-  "version": "0.0.3B",
+  "version": "0.0.4B",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
