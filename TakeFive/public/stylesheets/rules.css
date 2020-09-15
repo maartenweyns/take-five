@@ -77,10 +77,10 @@ h1, p, ul {
 .board {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (1fr)[5];
-      grid-template-columns: repeat(5, 1fr);
-  -ms-grid-rows: (1fr)[4];
-      grid-template-rows: repeat(4, 1fr);
+  -ms-grid-columns: (0.2fr)[5];
+      grid-template-columns: repeat(5, 0.2fr);
+  -ms-grid-rows: (0.25fr)[4];
+      grid-template-rows: repeat(4, 0.25fr);
   -webkit-box-pack: space-evenly;
       -ms-flex-pack: space-evenly;
           justify-content: space-evenly;

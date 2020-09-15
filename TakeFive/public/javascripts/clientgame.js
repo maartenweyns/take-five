@@ -209,7 +209,7 @@ function confirmSelection() {
  * @param {array} data The received data of the cards to draw
  */
 function drawOpenCards(data) {
-    console.log('Last changed card is: ' + data.last);
+    // console.log('Last changed card is: ' + data.last);
     let cardslots = document.getElementsByClassName('cardslot');
     for (let cardslot of cardslots) {
         cardslot.style.backgroundImage = '';
@@ -226,7 +226,10 @@ function drawOpenCards(data) {
                     container.classList.remove('popcard');
                 }, 500)
             }
-            container.style.backgroundImage = `url(../images/cards/png/${cards[i][j]}.png)`;
+            let image = document.createElement('img');
+            image.src = `../images/cards/png/${cards[i][j]}.png`;
+            container.innerHTML = '';
+            container.append(image);
             container.onclick = function () {chooseRow(i)};
         }
     }

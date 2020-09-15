@@ -66,8 +66,8 @@ h1, p, ul {
 .board {
     // Setup CSS Grid
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 0.2fr);
+    grid-template-rows: repeat(4, 0.25fr);
     justify-content: space-evenly;
 
     .cardslot {
