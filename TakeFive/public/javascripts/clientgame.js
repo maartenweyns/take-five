@@ -212,7 +212,11 @@ function drawOpenCards(data) {
     // console.log('Last changed card is: ' + data.last);
     let cardslots = document.getElementsByClassName('cardslot');
     for (let cardslot of cardslots) {
-        cardslot.style.backgroundImage = '';
+        let image = document.createElement('img');
+        image.src = `../images/cards/png/0.png`;
+        cardslot.innerHTML = '';
+        cardslot.append(image);
+        cardslot.onclick = function () {chooseRow(i)};
     }
     let cards = data.cards;
     let lastChanged = data.last;
@@ -226,6 +230,7 @@ function drawOpenCards(data) {
                     container.classList.remove('popcard');
                 }, 500)
             }
+            // container.style.backgroundImage = `url(../images/cards/png/${cards[i][j]}.png)`;
             let image = document.createElement('img');
             image.src = `../images/cards/png/${cards[i][j]}.png`;
             container.innerHTML = '';

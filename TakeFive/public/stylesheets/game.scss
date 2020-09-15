@@ -108,31 +108,31 @@ body {
 
         // Setup CSS Grid
         display: grid;
-        grid-template-columns: repeat(5, 0.2fr);
-        grid-template-rows: repeat(4, 0.25fr);
+        grid-template-columns: repeat(5, 1fr);
         justify-content: space-evenly;
 
         .cardslot {
             transition: 100ms;
-            box-shadow: $material-shadow;
-            background-color: #eeeeee;
-            background-size: cover;
+            background-size: contain;
             background-repeat: no-repeat;
-            margin: 10px;
             border-radius: 5px;
             font-size: 0;
             overflow: hidden;
+            padding: 10px;
+
+            display: flex;
+            justify-content: center;
 
             img {
                 max-width: 100%;
                 max-height: 100%;
+                border-radius: 5px;
+                box-shadow: $material-shadow;
             }
-        }
-
-        .cardslot:hover {
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24),
+            img:hover {
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.28), 0 3px 1px -2px rgba(0, 0, 0, 0.24),
                 0 1px 5px 0 rgba(0, 0, 0, 0.4);
-            background-color: #eeeeee;
+            }
         }
 
         .popcard {
