@@ -13,6 +13,10 @@ router.get('/score', function(req, res, next) {
   res.sendFile("score.html", {root: "./public"})
 });
 
+router.get('/rules', function(req, res, next) {
+  res.sendFile("rules.html", {root: "./public"})
+});
+
 // router.get('/profile', requiresAuth(), (req, res) => {
 //   res.send(JSON.stringify(req.openid.user));
 // });
