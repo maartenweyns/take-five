@@ -143,8 +143,6 @@ body {
 }
 
 .playarea .board .cardslot {
-  -webkit-transition: 100ms;
-  transition: 100ms;
   background-size: contain;
   background-repeat: no-repeat;
   border-radius: 5px;
@@ -160,6 +158,8 @@ body {
 }
 
 .playarea .board .cardslot img {
+  -webkit-transition: 100ms;
+  transition: 100ms;
   max-width: 100%;
   max-height: 100%;
   border-radius: 5px;
@@ -262,6 +262,9 @@ body {
   }
   .playarea .owncards {
     width: 100vw;
+  }
+  .cardslot {
+    padding: 5px !important;
   }
 }
 
