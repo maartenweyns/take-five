@@ -50,6 +50,18 @@
             >
         </div>
 
+        <a class="waves-effect waves-light btn modal-trigger" id="modal-error-trigger" href="#modal-error" style="display: none;"></a>
+
+        <div id="modal-error" class="modal">
+            <div class="modal-content">
+                <h4>Oops!</h4>
+                <p id="errortext"></p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Okay</a>
+            </div>
+        </div>
+
         <div class="card z-depth-3 gamebox" id="gameoverview" style="display: none;">
             <h1>You are in game <span id="gameid"></span></h1>
             <a id="startButton" class="blue waves-effect waves-light btn" onclick="startgame();"
@@ -63,7 +75,7 @@
         <p class="infoText">Created by <strong>Maarten Weyns</strong></p>
         <img class="mwglogo" src="images/logos/mawey-games-black-bluedrop.svg" />
 
-        <p class="version card">Version 0.0.3 (BETA)</p>
+        <p class="version card">Version 0.0.4 (BETA)</p>
 
         <!--SocketIO JavaScript-->
         <script

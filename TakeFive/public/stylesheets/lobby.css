@@ -47,6 +47,10 @@ body {
   font-weight: bold;
 }
 
+.welcomebox #game_code {
+  text-transform: uppercase;
+}
+
 .gamebox {
   display: -webkit-box;
   display: -ms-flexbox;

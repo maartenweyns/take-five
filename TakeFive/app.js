@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
 
     socket.on("player-name", (data) => {
         let name = data.name;
-        let gid = data.gid;
+        let gid = data.gid.toUpperCase();
         let sid = socket.id;
 
         let game = games.get(gid);
@@ -57,6 +57,10 @@ io.on("connection", (socket) => {
         }
         if (game.state !== "lobby") {
             socket.emit("game-started");
+            return;
+        }
+        if (game.nameExists(name)) {
+            socket.emit('name-exists');
             return;
         }
         let result = game.addPlayer(name, sid);

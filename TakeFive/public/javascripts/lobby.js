@@ -3,6 +3,8 @@ var socket;
 var gameid;
 var playerid;
 
+M.AutoInit();
+
 function create(create) {
     document.getElementById('pname').style.display = "block";
     if (!create) {
@@ -60,15 +62,19 @@ function setup(creating) {
     });
 
     socket.on('invalid-game', () => {
-        alert('That game does not exist!');
+        showError('That game does not exist!');
     });
 
     socket.on('game-full', () => {
-        alert('This game is full!');
+        showError('This game is full!');
     });
 
     socket.on('game-started', () => {
-        alert('This game has already started!');
+        showError('This game has already started!');
+    });
+
+    socket.on('name-exists', () => {
+        showError('This game already has a player with that username!');
     });
 
     socket.on('player-overview', (players) => {
@@ -97,4 +103,9 @@ function setup(creating) {
     socket.on('game', () => {
         window.location.pathname = '/play';
     });
+}
+
+function showError(message) {
+    document.getElementById('errortext').innerText = message;
+    document.getElementById('modal-error-trigger').click();
 }

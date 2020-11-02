@@ -102,6 +102,17 @@ describe('Game With Players Test', () => {
         // Verify that all players in the game are ready
         expect(game.allPlayersReady()).toBeTruthy();
     });
+
+    test('Username in game test', () => {
+        // Test with a name that does exist in the game already
+        let username = 'Timmy';
+        let exists = game.nameExists(username);
+        expect(exists).toBeTruthy();
+        // Test with a new name
+        let username1 = 'John';
+        let exists1 = game.nameExists(username1);
+        expect(exists1).toBeFalsy(); 
+    });
 });
 
 describe('Game Started Test', () => {

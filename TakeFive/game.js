@@ -112,6 +112,20 @@ game.prototype.player = function(playerID) {
 };
 
 /**
+ * This function checks whether or not the given username exists in the game
+ * @param {string} name The name to check
+ * @returns {boolean} True if the name exists in the game
+ */
+game.prototype.nameExists = function(name) {
+    for (let player of this.players) {
+        if (player.getName().toUpperCase() == name.toUpperCase()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * This function will increment the round by 1
  */
 game.prototype.nextRound = function() {
