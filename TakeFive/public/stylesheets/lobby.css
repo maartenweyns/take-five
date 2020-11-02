@@ -51,7 +51,23 @@ body {
   text-transform: uppercase;
 }
 
-.gamebox {
+.game-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.game-info .gamebox {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -68,12 +84,45 @@ body {
   padding: 10px;
 }
 
-.gamebox h1 {
+.game-info .gamebox h1 {
   margin-top: 0;
 }
 
-.gamebox span {
+.game-info .gamebox span {
   font-weight: bold;
+}
+
+.game-info .useroverview {
+  display: -ms-grid;
+  display: grid;
+  width: 100%;
+  -ms-grid-columns: (1fr)[2];
+      grid-template-columns: repeat(2, 1fr);
+}
+
+.game-info .useroverview .player-box {
+  font-size: 14px;
+  font-weight: bold;
+  padding: 10px;
+  margin: 10px;
+  margin-top: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.game-info .useroverview .player-box:nth-child(odd) {
+  margin-left: 0px;
+}
+
+.game-info .useroverview .player-box:nth-child(even) {
+  margin-right: 0px;
 }
 
 .infoText {

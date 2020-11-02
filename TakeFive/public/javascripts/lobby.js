@@ -78,9 +78,7 @@ function setup(creating) {
     });
 
     socket.on('player-overview', (players) => {
-        for (let player of players) {
-            console.log('Player: ' + player.name);
-        }
+        showPlayers(players);
     });
 
     socket.on('information', (data) => {
@@ -88,9 +86,9 @@ function setup(creating) {
         playerid = data.playerID;
         gameid = data.gameID;
 
-        // Show the gameID on screen
+        // Show the gameID and players on screen
         document.getElementById('gameid').innerText = gameid;
-        document.getElementById('gameoverview').style.display = "flex";
+        document.getElementById('game-info').style.display = "flex";
         document.getElementById('welcomebox').style.display = "none";
 
         // Setup the cookies
@@ -103,6 +101,17 @@ function setup(creating) {
     socket.on('game', () => {
         window.location.pathname = '/play';
     });
+}
+
+function showPlayers(players) {
+    let pcontainer = document.getElementById('users-overview');
+    pcontainer.innerHTML = '';
+    for (let player of players) {
+        let pdiv = document.createElement('div');
+        pdiv.classList.add('player-box', 'card', 'z-depth-3');
+        pdiv.innerText = player.name;
+        pcontainer.append(pdiv);
+    }
 }
 
 function showError(message) {
