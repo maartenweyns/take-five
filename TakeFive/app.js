@@ -169,6 +169,24 @@ io.on("connection", (socket) => {
             allPlayersChose(game);
         }
     });
+
+    socket.on('disconnecting', () => {
+        let game = games.get(Object.keys(socket.rooms)[1]);
+        if (game === undefined) {
+            return;
+        }
+
+        if(game.state === "lobby") {
+            let sid = socket.id;
+            console.log(sid)
+            game.removePlayerSocketId(sid);
+        }
+
+        io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
+        for (let player of game.players) {
+            io.to(player.getSid()).emit("information", { playerID: player.getID(), gameID: game.getID() });
+        }
+    });
 });
 
 /**

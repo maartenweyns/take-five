@@ -30,6 +30,10 @@ player.prototype.getName = function () {
     return this.name;
 };
 
+player.prototype.getSid = function () {
+    return this.socketid;
+};
+
 player.prototype.getPenaltyCards = function () {
     return this.penaltyCards;
 };
@@ -92,6 +96,10 @@ player.prototype.getCards = function () {
 
 player.prototype.updateSocketID = function (sid) {
     this.socketid = sid;
+};
+
+player.prototype.updatePlayerID = function (pid) {
+    this.id = pid;
 };
 
 /**

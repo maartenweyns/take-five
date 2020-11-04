@@ -126,6 +126,33 @@ game.prototype.nameExists = function(name) {
 }
 
 /**
+ * This function will remove a player from the game, if the game is still in the lobby state
+ */
+game.prototype.removePlayerSocketId = function(socketid) {
+    if (this.state !== 'lobby') {
+        return false;
+    }
+
+    // Get the player from the players list
+    let premove;
+    for (let player of this.players) {
+        if (player.getSid() === socketid) {
+            premove = player;
+            break;
+        }
+    }
+    if (premove !== undefined) {
+        this.players.splice(premove.getID(), 1);
+        console.log("Player got removed");
+
+        // Renew the player id's of the existing players
+        for (let i = 0; i < this.players.length; i++) {
+            this.players[i].updatePlayerID(i);
+        }
+    }
+}
+
+/**
  * This function will increment the round by 1
  */
 game.prototype.nextRound = function() {
