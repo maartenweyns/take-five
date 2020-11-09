@@ -119,6 +119,8 @@ io.on("connection", (socket) => {
             socket.emit("own-cards", game.player(pid).getCards());
             // Send the open cards
             socket.emit("open-cards", game.getOpenCards());
+            // Send the all info signal
+            socket.emit('all-info');
         }
     });
 
@@ -148,7 +150,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("confirm-row-choice", (data) => {
-        console.log(`Player chose row ${data.row}`);
         let game = games.get(Object.keys(socket.rooms)[1]);
 
         if (game === undefined) {
@@ -159,7 +160,6 @@ io.on("connection", (socket) => {
         let pid = data.pid;
         let row = data.row;
         if (pid !== game.getChoosingRow()) {
-            console.log(`This player should not be choosing a row, but ${game.getChoosingRow()} should`);
             return;
         }
         if (row !== undefined) {
@@ -195,56 +195,99 @@ io.on("connection", (socket) => {
  * @param {object} game The game of which we are ending a round
  */
 function allPlayersChose(game) {
-    if (game.getSelectedCards().length === 0) {
-        // Go to the next round if necessary.
-        if (game.getCardInRound() >= 10) {
-            game.nextRound();
-            io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
-            io.in(game.getID()).emit("end-round-score", game.getScores());
-            let dead = game.getDeadPlayers();
-            for (let player of dead) {
-                io.to(player.getSocketID()).emit("dead");
-            }
-            // Check if there is one or less than one player alive
-            if (dead.length >= game.getPlayers().length - 1) {
-                let playerswon = game.getWinningPlayer();
-                for (let player of playerswon){
-                    io.to(player.getSocketID()).emit('winner');
-                }
-            }
-        } else {
-            game.nextCard();
-        }
-        // Send the player information
-        io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
-        // Set all players to not ready
-        game.setAllPlayersReady(false);
-        // Send the cards to each player
-        let players = game.getPlayers();
-        for (let player of players) {
-            io.to(player.getSocketID()).emit("own-cards", game.player(player.getID()).getCards());
-        }
-        return;
-    }
-    let selection = game.selectedCards.pop();
+    if (game.rowNeedsToBeDrawn()) {
+        let card = game.selectedCards.pop();
 
-    if (selection.num < game.getSmallestCard()) {
-        // The card requires the player to choose a row.
-        game.setChoosingRow(selection.pid);
-        sendPlayerCard(io.in(game.getID()), selection, -1);
-
+        // The first card of the stack is a card that needs to become the beginning of a row
+        game.setChoosingRow(card.pid);
+        io.in(game.getID()).emit('row-to-be-chosen', card);
         // Push the card to the stack so that we can replace the row with this card
-        game.selectedCards.push(selection);
-
+        game.selectedCards.push(card);
         return;
     } else {
-        game.placeCardOnRow(selection.num, selection.pid);
-        sendPlayerCard(io.in(game.getID()), selection);
-        setTimeout(function () {
-            io.in(game.getID()).emit("open-cards", game.getOpenCards());
-            allPlayersChose(game);
-        }, 2000);
+        let endRoundArray = game.getGameEndingStates();
+        io.in(game.getID()).emit('round-states', endRoundArray);
     }
+    
+    // Go to the next round if necessary.
+    if (game.getCardInRound() >= 10) {
+        game.nextRound();
+        io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
+        io.in(game.getID()).emit("end-round-score", game.getScores());
+        let dead = game.getDeadPlayers();
+        for (let player of dead) {
+            io.to(player.getSocketID()).emit("dead");
+        }
+        // Check if there is one or less than one player alive
+        if (dead.length >= game.getPlayers().length - 1) {
+            let playerswon = game.getWinningPlayer();
+            for (let player of playerswon){
+                io.to(player.getSocketID()).emit('winner');
+            }
+        }
+    } else {
+        game.nextCard();
+    }
+    // Send the player information
+    io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
+    // Set all players to not ready
+    game.setAllPlayersReady(false);
+    // Send the cards to each player
+    let players = game.getPlayers();
+    for (let player of players) {
+        io.to(player.getSocketID()).emit("own-cards", game.player(player.getID()).getCards());
+    }
+
+    // if (game.getSelectedCards().length === 0) {
+    //     // Go to the next round if necessary.
+    //     if (game.getCardInRound() >= 10) {
+    //         game.nextRound();
+    //         io.in(game.getID()).emit("open-cards", game.getOpenCards(), 0);
+    //         io.in(game.getID()).emit("end-round-score", game.getScores());
+    //         let dead = game.getDeadPlayers();
+    //         for (let player of dead) {
+    //             io.to(player.getSocketID()).emit("dead");
+    //         }
+    //         // Check if there is one or less than one player alive
+    //         if (dead.length >= game.getPlayers().length - 1) {
+    //             let playerswon = game.getWinningPlayer();
+    //             for (let player of playerswon){
+    //                 io.to(player.getSocketID()).emit('winner');
+    //             }
+    //         }
+    //     } else {
+    //         game.nextCard();
+    //     }
+    //     // Send the player information
+    //     io.in(game.getID()).emit("player-overview", game.getPlayerInformation());
+    //     // Set all players to not ready
+    //     game.setAllPlayersReady(false);
+    //     // Send the cards to each player
+    //     let players = game.getPlayers();
+    //     for (let player of players) {
+    //         io.to(player.getSocketID()).emit("own-cards", game.player(player.getID()).getCards());
+    //     }
+    //     return;
+    // }
+    // let selection = game.selectedCards.pop();
+
+    // if (selection.num < game.getSmallestCard()) {
+    //     // The card requires the player to choose a row.
+    //     game.setChoosingRow(selection.pid);
+    //     sendPlayerCard(io.in(game.getID()), selection, -1);
+
+    //     // Push the card to the stack so that we can replace the row with this card
+    //     game.selectedCards.push(selection);
+
+    //     return;
+    // } else {
+    //     game.placeCardOnRow(selection.num, selection.pid);
+    //     sendPlayerCard(io.in(game.getID()), selection);
+    //     setTimeout(function () {
+    //         io.in(game.getID()).emit("open-cards", game.getOpenCards());
+    //         allPlayersChose(game);
+    //     }, 2000);
+    // }
 }
 
 /**

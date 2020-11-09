@@ -1,11 +1,25 @@
+/**
+ * This file is created by Maarten Weyns.
+ * 
+ * Take Five online, developed by MaWey Games.
+ * Play for free on takefive.ga
+ * More info on games.mawey.be (site in production)
+ */
+
 // Setup variables
 var gameid = localStorage.getItem("gameID");
 var playerid = Number(localStorage.getItem("playerID"));
 
 var deathPopupShown = false;
 
+// Initialize game variables
+var playerInfo;
+var ownCards;
+
+// Start the socket.io connection
 socket = io(location.host);
 
+// Initialize the MaterializeCSS components
 M.AutoInit();
 
 (function setup() {
@@ -16,11 +30,19 @@ M.AutoInit();
     });
 
     socket.on("player-overview", (players) => {
-        showUsers(players);
+        playerInfo = players;
     });
 
     socket.on("own-cards", (cards) => {
-        showOwnCards(cards);
+        ownCards = cards;
+    });
+
+    socket.on('row-to-be-chosen', (card) => {
+        rowToBeChosen(card);
+    });
+
+    socket.on('round-states', (data) => {
+        endRoundData(data);
     });
 
     socket.on("open-cards", (cards) => {
@@ -65,32 +87,43 @@ M.AutoInit();
     socket.on("disconnect", () => {
         M.toast({ html: "Disconnected!" });
     });
+
+    socket.on('all-info', () => {
+        // We recieved all initial info from the server, let's show it!
+        showUsers(playerInfo);
+        showOwnCards(ownCards);
+    });
+
+    
 })();
 
 function showOwnCards(cards) {
-    // Get the card container
-    let container = document.getElementById("owncardscontainer");
-    container.innerHTML = "";
+    if (cards !== undefined) {
+        // Get the card container
+        let container = document.getElementById("owncardscontainer");
+        container.innerHTML = "";
 
-    // Counter
-    let count = 0;
-    // Create a new div for all cards
-    for (let card of cards) {
-        let cardDiv = document.createElement("div");
-        cardDiv.classList.add("ownCard");
-        cardDiv.id = `card${count++}`;
-        cardDiv.onclick = function () {
-            selectCard(cardDiv.id);
-        };
-        cardDiv.setAttribute("num", card);
-        let cardimg = document.createElement("img");
-        cardimg.src = `../images/cards/png/${card}.png`;
-        cardimg.classList.add("cardImage");
-        cardDiv.append(cardimg);
-        container.append(cardDiv);
+        // Counter
+        let count = 0;
+        // Create a new div for all cards
+        for (let card of cards) {
+            let cardDiv = document.createElement("div");
+            cardDiv.classList.add("ownCard");
+            cardDiv.id = `card${count++}`;
+            cardDiv.onclick = function () {
+                selectCard(cardDiv.id);
+            };
+            cardDiv.setAttribute("num", card);
+            let cardimg = document.createElement("img");
+            cardimg.src = `../images/cards/png/${card}.png`;
+            cardimg.classList.add("cardImage");
+            cardDiv.append(cardimg);
+            container.append(cardDiv);
+        }
+
+        console.log("Showing cards");
     }
-
-    console.log("Showing cards");
+    
 }
 
 /**
@@ -98,50 +131,53 @@ function showOwnCards(cards) {
  * @param {array} users 
  */
 function showUsers(users) {
-    // Empty the data from the container
-    let bigcontainer = document.getElementById('usersleft');
-    bigcontainer.innerHTML = '';
+    if (users !== undefined) {
+        // Empty the data from the container
+        let bigcontainer = document.getElementById('usersleft');
+        bigcontainer.innerHTML = '';
 
-    // Create empty user containers
-    for (let i = 0; i < 10; i++) {
-        let container = document.createElement('div');
-        container.id = `user${i}`;
-        container.classList.add('userslot');
+        // Create empty user containers
+        for (let i = 0; i < 10; i++) {
+            let container = document.createElement('div');
+            container.id = `user${i}`;
+            container.classList.add('userslot');
 
-        bigcontainer.append(container);
-    }
-
-    // Fill in the new data
-    let count = 0;
-    for (let user of users) {
-        let container = document.getElementById(`user${count++}`);
-
-        let score = document.createElement("p");
-        score.innerText = user.score;
-        score.classList.add("score");
-        score.id = `score${count - 1}`
-        if(user.penalty) {
-            score.style.color = 'red';
+            bigcontainer.append(container);
         }
 
-        let name = document.createElement("p");
-        name.innerText = user.name;
-        name.classList.add("name");
+        // Fill in the new data
+        let count = 0;
+        for (let user of users) {
+            let container = document.getElementById(`user${count++}`);
 
-        container.append(score, name);
+            let score = document.createElement("p");
+            score.innerText = user.score;
+            score.classList.add("score");
+            score.id = `score${count - 1}`
+            if(user.penalty) {
+                score.style.color = 'red';
+            }
 
-        if (user.alive) {
-            let thinking = document.createElement('div');
-            thinking.classList.add('progress');
-            let pbar = document.createElement('div');
-            pbar.classList.add('indeterminate', 'blue');
-            thinking.append(pbar);
+            let name = document.createElement("p");
+            name.innerText = user.name;
+            name.classList.add("name");
 
-            container.append(thinking);
-        } else {
-            container.classList.add('user-dead');
+            container.append(score, name);
+
+            if (user.alive) {
+                let thinking = document.createElement('div');
+                thinking.classList.add('progress');
+                let pbar = document.createElement('div');
+                pbar.classList.add('indeterminate', 'blue');
+                thinking.append(pbar);
+
+                container.append(thinking);
+            } else {
+                container.classList.add('user-dead');
+            }
         }
     }
+    
 }
 
 function markPlayerReady(pid) {
@@ -300,6 +336,62 @@ function showEndCard(data) {
     card.classList.add("flip-in-hor-top");
 
     container.append(card, userslot);
+}
+
+function showEndCardNew(number, name) {
+    let container = document.getElementById("usersleft");
+    container.innerHTML = "";
+
+    let userslot = document.createElement("div");
+    userslot.classList.add("userslot", "user-card-slot");
+    let username = document.createElement("p");
+    username.innerText = name;
+    username.classList.add("cardname");
+    userslot.append(username);
+
+    let card = document.createElement("img");
+    card.src = `../images/cards/png/${number}.png`;
+    card.classList.add("cardimage");
+    card.classList.add("flip-in-hor-top");
+
+    container.append(card, userslot);
+}
+
+function rowToBeChosen(card) {
+    let pid = card.pid;
+    let num = card.num;
+    let name = card.name;
+    showEndCardNew(num, name);
+    if (pid === playerid) {
+        M.toast({html: "Choose a row by clicking on its first card!"});
+    }
+}
+
+/**
+ * This function will show the user the ending data of the currently played round.
+ * @param {array} data The data to be processed by the client
+ */
+function endRoundData(data) {
+    // Get all states from the array
+    for (let i = 0; i < data.length; i++) {
+        let state = data[i];
+        let card = state.cardNum;
+        let name = state.cardPlayer;
+        let openCards = state.openCardsState;
+        
+        setTimeout(() => {
+            showEndCardNew(card, name);
+            setTimeout(() => {
+                drawOpenCards(openCards);
+                if (i === data.length - 1) {
+                    setTimeout(() => {
+                        showUsers(playerInfo);
+                        showOwnCards(ownCards);
+                    }, 1000* (i + 1));
+                }
+            }, 1000 * (i + 1));
+        }, 1000 * i);
+    }
 }
 
 /**

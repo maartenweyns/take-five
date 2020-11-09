@@ -416,6 +416,46 @@ game.prototype.addCardToRow = function (card, row) {
 };
 
 /**
+ * This funtion determines whether or not the smallest chosen card is
+ * smaller than the smallest card of the game.
+ * @returns {boolean} True if the first player needs to take a row.
+ */
+game.prototype.rowNeedsToBeDrawn = function() {
+    if (this.selectedCards.length > 0) {
+        // Get the first card from the selected cards array
+        let firstCard = this.selectedCards.pop();
+        // Add the card back to the array
+        this.selectedCards.push(firstCard);
+        if (firstCard.num < this.getSmallestCard()) {
+            return true;
+        } else {
+            return false;
+        }   
+    }
+    return false;
+};
+
+/**
+ * This function creates an array of objects for clients to interpret as an ending game object
+ * @returns {array} An array of objects containing the different states of the game to be shown
+ * in sequential order.
+ */
+game.prototype.getGameEndingStates = function () {
+    let array = [];
+    while (this.selectedCards.length > 0) {
+        let card = this.selectedCards.pop();
+        this.placeCardOnRow(card.num, card.pid);
+        let singleObject = {
+            'cardNum': card.num,
+            'cardPlayer': card.name,
+            'openCardsState': this.getOpenCards()            
+        };
+        array.push(singleObject);
+    }
+    return array;
+};
+
+/**
  * This function will determine the winning player of the game, depending on the players that died in the last played round
  * @returns {Player} The winning player object
  */
