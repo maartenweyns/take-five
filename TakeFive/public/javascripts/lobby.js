@@ -5,6 +5,20 @@ var playerid;
 
 M.AutoInit();
 
+function checkRulesDismissed() {
+    let dismissed = getCookie("dismissedRules");
+    if (dismissed === "") {
+        showRulesDiscovery();
+        setCookie("dismissedRules", "true", 365);
+    }
+  }
+
+function showRulesDiscovery() {
+    let elems = document.querySelectorAll('.tap-target');
+    let instance = M.TapTarget.getInstance(elems[0]);
+    instance.open();
+}
+
 function create(create) {
     document.getElementById('pname').style.display = "block";
     if (!create) {
@@ -117,4 +131,37 @@ function showPlayers(players) {
 function showError(message) {
     document.getElementById('errortext').innerText = message;
     document.getElementById('modal-error-trigger').click();
+}
+
+/**
+ * Get a cookie by name
+ * @param {string} cname The name of the cookie
+ */
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+}
+
+/**
+ * This function will set a cookie in the browser
+ * @param {string} cname The name of the cookie
+ * @param {string} cvalue The value of the cookie
+ * @param {number} exdays The days after which the cookie will expire
+ */
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }

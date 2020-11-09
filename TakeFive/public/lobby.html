@@ -80,8 +80,16 @@
         <img class="mwglogo" src="images/logos/mawey-games-black-bluedrop.svg" />
 
         <div class="version">
-            <a class="btn-floating btn-large waves-effect waves-light blue rulesbtn" id="rules" href="/rules"><i class="material-icons">help_outline</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light blue rulesbtn" id="rulebutton" href="/rules"><i class="material-icons">help_outline</i></a>
             <p class="versioninfo card">Version 0.0.5 (BETA)</p>
+        </div>
+
+        <!-- Rules Feature Discovery -->
+        <div class="tap-target blue" data-target="rulebutton">
+            <div class="tap-target-content white-text">
+            <h5>Game Rules</h5>
+            <p>Never played the game before? No problem! Read the rules by clicking this button!</p>
+            </div>
         </div>
 
         <!--SocketIO JavaScript-->
@@ -94,5 +102,8 @@
         <script type="text/javascript" src="javascripts/materialize.min.js"></script>
         <!--Lobby-Specific Javascript-->
         <script type="text/javascript" src="javascripts/lobby.js"></script>
+        <script>
+            checkRulesDismissed();
+        </script>
     </body>
 </html>
